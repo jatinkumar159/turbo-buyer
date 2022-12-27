@@ -9,7 +9,6 @@ import { selectOtpLength } from "../../redux/slices/settingsSlice";
 import { showErrorToast } from "../../utils/toasts";
 import * as Yup from 'yup';
 import styles from "./verifyorder.module.scss";
-import { error } from "console";
 
 export default function VerifyOrder() {
     const toast = useToast();
@@ -45,9 +44,12 @@ export default function VerifyOrder() {
                     return;
                 }
 
-                if (data.verified) router.push('/success');
-                else throw new Error("data is not verified");
-            } catch(error) {
+                if (data.verified) {
+                    if (data.token) localStorage.setItem('token', data.token);
+                    router.push('/success');
+                }
+                else throw new Error("Data is not verified");
+            } catch (error) {
                 showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
             }
         }
@@ -83,7 +85,7 @@ export default function VerifyOrder() {
     return (
         <Flex flexDir={`column`} justifyContent={`space-between`} h={`100%`} className={styles.container} align="center">
             <form onSubmit={formik.handleSubmit}>
-                <Text as="h2" mb={4} textAlign={`center`} fontSize={`20px`}>Verify your mobile number</Text>
+                <Text as="h2" mb={4} textAlign={`center`} fontSize={`20px`}>OTP verification for your COD order</Text>
                 <FormControl isInvalid={isOtpInvalid}>
                     <Text color={`gray.500`} textAlign={`center`}>Enter the OTP we just sent on {phone}</Text>
                     <HStack justifyContent={`center`} mt={4} mb={4}>

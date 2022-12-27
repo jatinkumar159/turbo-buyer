@@ -88,7 +88,11 @@ export default function NewAddress() {
             city: Yup.string().required('This is a mandatory field.'),
             state: Yup.string().required('This is a mandatory field.'),
             country: Yup.string().required('This is a mandatory field.'),
-            pincode: Yup.string().required('This is a mandatory field.'),
+            pincode: Yup.string().required('This is a mandatory field.').length(6, 'Invalid Pincode').test('invalid-pincode', 'Invalid Pincode', function (value) {
+                const { city, state } = this.parent;
+                if (city && state) return true;
+                else return false;
+            }),
             address_type: Yup.string().required('This is a mandatory field.'),
             mobile: Yup.string().length(10, 'Invalid Mobile Number').required('This is a mandatory field.'),
             email: Yup.string().email('Invalid Email Format'),
@@ -114,21 +118,10 @@ export default function NewAddress() {
     const fillPostalData = async (pincode: string) => {
         setLoadingPincode(true);
         const data: any = await getPostalAddress(pincode);
-        if (data.hasOwnProperty('api_error')) {
-            formik.setErrors({
-                pincode: 'Invalid Pincode'
-            });
+        if (data.hasOwnProperty('api_error') || data.city === null || data.state === null) {
             setLoadingPincode(false);
             return;
         }
-        if (data.city === null || data.state === null) {
-            formik.setErrors({
-                pincode: "Invalid Pincode"
-            });
-            setLoadingPincode(false);
-            return;
-        }
-        // await formik.setTouched({ ...formik.touched, city: true, state: true, country: true }, false);
         await formik.setValues({ ...formik.values, city: data['city'], state: data['state'], country: data['country'] });
         setLoadingPincode(false);
     }
