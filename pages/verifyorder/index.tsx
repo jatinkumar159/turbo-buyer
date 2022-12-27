@@ -81,7 +81,7 @@ export default function VerifyOrder() {
     }
 
     return (
-        <Flex flexDir={`column`} justifyContent={`space-between`} h={`100%`} className={styles.container}>
+        <Flex flexDir={`column`} justifyContent={`space-between`} h={`100%`} className={styles.container} align="center">
             <form onSubmit={formik.handleSubmit}>
                 <Text as="h2" mb={4} textAlign={`center`} fontSize={`20px`}>Verify your mobile number</Text>
                 <FormControl isInvalid={isOtpInvalid}>
