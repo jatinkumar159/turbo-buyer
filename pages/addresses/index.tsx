@@ -78,8 +78,10 @@ export default function AddressList() {
 
     useEffect(() => {
         if (!formik.values.selectedAddress) return;
-        const selectedAddress = JSON.parse(formik.values.selectedAddress);
+
+        const selectedAddress = data?.address_list?.at(+formik.values.selectedAddress);
         dispatch(setSelectedAddress(selectedAddress!));
+        
         if (cart) handleUpdateCart(cart['id'], 'ADDRESS_UPDATE', selectedAddress);
         router.push('/confirmation');
     }, [formik.values.selectedAddress])
@@ -119,8 +121,8 @@ export default function AddressList() {
                                 {data.address_list?.length ? data.address_list.map((address, index) => {
                                     return (
                                         <Box mb={2} key={index} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
-                                            <Radio colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={JSON.stringify(address)} className={`${styles.radio}`}>
-                                                <AddressCard key={address.address_id} isInForm={true} address={address} mobile={data.mobile} selected={address.address_id === formik.values.selectedAddress} />
+                                            <Radio colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={index.toString()} className={`${styles.radio}`}>
+                                                <AddressCard key={index} index={index} isInForm={true} address={address} mobile={data.mobile} selected={index === +formik.values.selectedAddress} />
                                             </Radio>
                                         </Box>
                                     );

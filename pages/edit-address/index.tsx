@@ -2,7 +2,7 @@ import { Box, Button, Center, Checkbox, Flex, FormControl, FormErrorMessage, For
 import { useFormik } from "formik";
 import styles from './edit-address.module.scss';
 import * as Yup from 'yup';
-import { getPostalAddress } from "../../apis/get";
+import { fetchAddresses, getPostalAddress } from "../../apis/get";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -15,6 +15,7 @@ import { selectPhone, unsetPhone, unverifyProfile } from "../../redux/slices/pro
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import PageFooter from "../../components/PageFooter/PageFooter";
 import cleanPhoneNumber from "../../utils/cleanPhoneNumber";
+import { useQuery } from "@tanstack/react-query";
 
 function RadioCard(props: any) {
     const { getInputProps, getCheckboxProps } = useRadio(props)
@@ -58,9 +59,11 @@ export default function EditAddress() {
     const phone = useAppSelector(selectPhone);
     const dispatch = useAppDispatch();
     const [loadingPincode, setLoadingPincode] = useState(false);
-    const { query: { address: address_ } } = router;
+    const { query: { addressIndex } } = router;
 
-    let address: Address = JSON.parse(address_ ? address_ as string : '') || {};
+    const { isLoading, isError, data } = useQuery([phone], () => fetchAddresses(phone));
+
+    let address = data?.address_list?.at(+addressIndex!);
 
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'HOME',
@@ -142,6 +145,36 @@ export default function EditAddress() {
         dispatch(unverifyProfile());
         router.push("/profile");
     }
+
+    if (isLoading) return <>
+        <Center h={`calc(100vh - 3rem)`}><Spinner /></Center> :
+    </>
+
+    if (isError || !addressIndex) return <>
+        <Center h={`calc(100vh - 3rem)`}>An error occurred, please try again later!</Center>
+    </>
+
+    if(!addressIndex) return <>
+        <Center bg={`var(--turbo-colors-background)`} h={`calc(100vh - 10rem)`}><p>Invalid Address Selected, Please try again with another address!</p></Center>
+        <Box p={4} borderTop={`1px solid var(--chakra-colors-gray-200)`}>
+            <Button type="submit" isDisabled={!formik.isValid} w={`100%`} bg={`black`} color={`white`} _hover={{ background: `black` }} mb={2} onClick={formik.submitForm}>
+                <Text as="span" fontSize="sm" textTransform={`uppercase`}>Proceed to Buy <ChevronRightIcon ms={2} fontSize={`lg`} /></Text>
+            </Button>
+            <PageFooter />
+        </Box>
+    </>
+
+    address = data?.address_list?.at(+addressIndex);
+
+    if(!address) return <>
+        <Center bg={`var(--turbo-colors-background)`} h={`calc(100vh - 10rem)`}><p>Invalid Address Selected, Please try again with another address!</p></Center>
+        <Box p={4} borderTop={`1px solid var(--chakra-colors-gray-200)`}>
+            <Button type="submit" isDisabled={!formik.isValid} w={`100%`} bg={`black`} color={`white`} _hover={{ background: `black` }} mb={2} onClick={formik.submitForm}>
+                <Text as="span" fontSize="sm" textTransform={`uppercase`}>Proceed to Buy <ChevronRightIcon ms={2} fontSize={`lg`} /></Text>
+            </Button>
+            <PageFooter />
+        </Box>
+    </>
 
     return (
         <Flex className={styles.container} flexDir="column">

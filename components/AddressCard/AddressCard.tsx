@@ -9,9 +9,10 @@ interface Props {
     mobile?: string;
     selected?: boolean;
     isInForm: boolean;
+    index: number;
 }
 
-export default function AddressCard({ address, mobile, selected, isInForm }: Props) {
+export default function AddressCard({ address, mobile, selected, isInForm, index }: Props) {
     const router = useRouter();
     if (!address) return <></>;
 
@@ -19,7 +20,7 @@ export default function AddressCard({ address, mobile, selected, isInForm }: Pro
         router.push({
             pathname: '/edit-address',
             query: {
-                address: JSON.stringify(address),
+                addressIndex: index,
             }
         }, 'edit-address');
     }
