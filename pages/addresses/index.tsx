@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Button, Progress, Text, FormControl, Radio, RadioGroup, Flex, Center, Spinner } from "@chakra-ui/react";
+import { Box, Button, Progress, Text, FormControl, Radio, RadioGroup, Flex, Center, Spinner, useDisclosure, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react";
 import styles from './addresses.module.scss';
 import AddressCard from "../../components/AddressCard/AddressCard";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -26,11 +26,13 @@ export default function AddressList() {
     const phone = useAppSelector(selectPhone);
     const cart = useAppSelector(selectCart);
     const firstLoad = useAppSelector(selectFirstLoad);
+    const selectedAddress = useAppSelector(selectSelectedAddress);
     const cartPayload = useAppSelector(selectCartPayload);
     const { isLoading, isError, data } = useQuery([phone], () => fetchAddresses(phone));
 
     const [showAllAddresses, setShowAllAddresses] = useState(false);
     const [showSpinner, setShowSpinner] = useState(firstLoad['addresses'] ? true : false);
+    const { isOpen, onClose, onOpen } = useDisclosure();
 
     const handleUpdateCart = async (id: string, type: string, data: any) => {
         try {
@@ -81,9 +83,10 @@ export default function AddressList() {
 
         const selectedAddress = data?.address_list?.at(+formik.values.selectedAddress);
         dispatch(setSelectedAddress(selectedAddress!));
-        
+
         if (cart) handleUpdateCart(cart['id'], 'ADDRESS_UPDATE', selectedAddress);
-        router.push('/confirmation');
+        onOpen()
+        // router.push('/confirmation');
     }, [formik.values.selectedAddress])
 
     // if (!phone) return <>
@@ -140,6 +143,33 @@ export default function AddressList() {
                     <PageFooter />
                 </Box>
             </Flex>
+
+            <Modal isCentered={true} isOpen={isOpen} onClose={onClose} motionPreset="none">
+                <ModalOverlay/>
+                <ModalContent>
+                    <ModalHeader>Are you sure?</ModalHeader>
+                    <ModalCloseButton mt={1}/>
+                    <ModalBody >
+                    <Flex flexDir="row" w="100%" align="flex-start">
+                        <Box flexGrow={1}>
+                            <Text mb={4}>Deliver to the following address:</Text>
+                            <Text as="p" fontWeight="bold">{selectedAddress?.name.trim()},</Text>
+                            <Text fontSize="xs">{selectedAddress?.address_line_1}</Text>
+                            <Text fontSize="xs" >{selectedAddress?.address_line2}</Text>
+                            <Text fontSize="xs">{selectedAddress?.pin_code || ''}</Text>
+                            {selectedAddress?.mobile ? <Text mt={2} fontSize="xs">Mobile: +91 {selectedAddress?.mobile}</Text> : null}
+                        </Box>
+                    </Flex>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button variant='ghost' size="sm" mr={4}>Cancel</Button>
+                        <Button colorScheme='blue' onClick={onClose} size="sm">
+                            Proceed
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     )
 }
