@@ -19,7 +19,7 @@ import { SearchCountry } from '../../components/SearchCountry/SearchCountry'
 import { ArrowForwardIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon } from '@chakra-ui/icons'
 import { selectCart, selectCartPayload, selectOtpLength, setCart } from '../../redux/slices/settingsSlice'
 import { showErrorToast } from '../../utils/toasts'
-import { getBuyerProfile } from '../../apis/get'
+import { fetchAddresses } from '../../apis/get'
 import jwtDecode from 'jwt-decode';
 import { Token } from '../../utils/interfaces'
 import PageFooter from '../../components/PageFooter/PageFooter'
@@ -98,7 +98,7 @@ export default function Profile() {
                         //     return;
                         // }
 
-                        // dispatch(setPhone(values.phone));
+                        dispatch(setPhone(values.phone));
                         // handleCreateCart(values.phone);
                         // if (data.guest_user) {
                         //     localStorage.setItem('turbo', data.token);
@@ -146,7 +146,7 @@ export default function Profile() {
                                             onChange={(e: ChangeEvent<HTMLInputElement>) => handleOnChange(e, handleChange, submitForm)}
                                         />
                                     </InputGroup>
-                                    <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                                    <FormErrorMessage justifyContent={`center`}>{errors.phone}</FormErrorMessage>
                                 </FormControl>
                                 <Box mt={8}>
                                     <Text fontSize={`sm`} textAlign={`center`}>By continuing, I agree to the <Link href={`https://unicommerce.com`} color={`--turbo-colors-link`} _hover={{ textDecor: 'underline' }}>Terms of Use </Link> & <Link color={`var(--turbo-colors-link)`} _hover={{ textDecor: 'underline' }}>Privacy Policy</Link></Text>
@@ -277,7 +277,8 @@ export default function Profile() {
     return (
         <>
             <Center className={styles.container}>
-                {(phone && !isVerified) ? <EnterOTP /> : <EnterPhone />}
+                {/* {(phone && !isVerified) ? <EnterOTP /> : <EnterPhone />} */}
+                <EnterPhone />
             </Center>
         </>
     )

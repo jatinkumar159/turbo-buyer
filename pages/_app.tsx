@@ -131,7 +131,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <Navigation />
                 {/* <PromoBar /> */}
                 {isPageTransitionActive ?
-                  <Center h={`calc(100vh - 80px)`}><Spinner /></Center> :
+                  <Center h={`calc(100vh - 3rem)`}><Spinner /></Center> :
                   <Component {...pageProps} className={styles.pageContainer} />
                 }
               </Flex>

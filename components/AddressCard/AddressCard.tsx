@@ -24,8 +24,12 @@ export default function AddressCard({ address, mobile, selected, isInForm }: Pro
         }, 'edit-address');
     }
 
+    const handleContinueWithAddress = (e) => {
+        console.log(">> ", e);
+    }
+
     return (
-        <Box w={`100%`}>
+        <Box w={`100%`} onClick={()=>handleContinueWithAddress(address.address_id)}>
             <Flex align={'flex-start'} gap={'0.5rem'}>
                 <Flex grow={1} flexDir={'column'}>
                     {!isInForm ? (

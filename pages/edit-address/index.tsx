@@ -169,7 +169,6 @@ export default function EditAddress() {
         <Flex className={styles.container} flexDir="column">
             {
                 address ? (<>
-
                     <Box onClick={handleChangeNumber}>
                         <Flex className={styles.section} ps={4} pe={4} pt={2} pb={2} align={`center`} mb={2}>
                             <Box className={`${styles.sectionContent}`} flexGrow={1}>
@@ -278,7 +277,15 @@ export default function EditAddress() {
                     </Box>
 
 
-                </>) : (<p>Invalid Address Selected, Please try again with another address!</p>)
+                </>) : (<>
+                        <Center bg={`var(--turbo-colors-background)`} h={`calc(100vh - 10rem)`}><p>Invalid Address Selected, Please try again with another address!</p></Center>
+                        <Box p={4} borderTop={`1px solid var(--chakra-colors-gray-200)`}>
+                            <Button type="submit" isDisabled={!formik.isValid} w={`100%`} bg={`black`} color={`white`} _hover={{ background: `black` }} mb={2} onClick={formik.submitForm}>
+                                <Text as="span" fontSize="sm" textTransform={`uppercase`}>Proceed to Buy <ChevronRightIcon ms={2} fontSize={`lg`} /></Text>
+                            </Button>
+                            <PageFooter />
+                        </Box>
+                </>)
             }
         </Flex>
     )
