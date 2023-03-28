@@ -76,7 +76,7 @@ export default function EditAddress() {
             mobile: cleanPhoneNumber(address?.mobile) || '',
             name: address?.name || '',
             email: address?.email || '',
-            pincode: address?.pincode || '',
+            pincode: address?.pin_code || '',
             city: address?.city || '',
             state: address?.state || '',
             address_line1: address?.address_line1 || '',

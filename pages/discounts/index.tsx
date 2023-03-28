@@ -62,7 +62,7 @@ export default function Discounts() {
                 </Flex>
             </Box>
 
-            {/* <DiscountCard /> */}
+            <DiscountCard />
 
             {/* <Formik
                 initialValues={{

@@ -8,7 +8,7 @@ import styles from './Sidebar.module.scss';
 export default function Sidebar() {
     const cartPayload = useAppSelector(selectCartPayload);
     return (
-        <Flex flexDir="column">
+        <Flex flexDir="column" display="none">
             <Text as="h2">Order Summary</Text>
             <Box>
                 { cartPayload && <Box> { cartPayload.items.map((orderItem: any, i: number) => 

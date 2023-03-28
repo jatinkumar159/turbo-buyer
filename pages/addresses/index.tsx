@@ -62,34 +62,35 @@ export default function AddressList() {
     useEffect(() => {
         if (!data) return;
 
-        if (!data.turbo_address_list?.length && !data.unifill_address_list?.length) router.replace('/new-address');
+        if (!data.address_list?.length && !data.address_list?.length) router.replace('/new-address');
 
-        if (firstLoad['addresses'] && data.turbo_address_list?.length) {
-            const defaultAddress = data.turbo_address_list.find(address => address.selected === true);
+        if (firstLoad['addresses'] && data.address_list?.length) {
+            const defaultAddress = data.address_list.find(address => address.selected === true);
             if (defaultAddress) {
                 dispatch(setName(defaultAddress.name));
                 formik.setFieldValue('selectedAddress', defaultAddress.address_id);
             } else setShowSpinner(false);
         } else setShowSpinner(false);
 
-        dispatch(setTurboAddressList(data.turbo_address_list));
-        dispatch(setUnifillAddressList(data.unifill_address_list));
+        dispatch(setTurboAddressList(data.address_list!));
+        // dispatch(setUnifillAddressList(data.address_list));
     }, [data])
 
     useEffect(() => {
+
         if (!formik.values.selectedAddress) return;
 
         const selectedAddress =
-            data?.turbo_address_list?.find(address => address.address_id === formik.values.selectedAddress)
-            || data?.unifill_address_list?.find(address => address.address_id === formik.values.selectedAddress);
+            data?.address_list?.find(address => address.address_id === formik.values.selectedAddress)
+            || data?.address_list?.find(address => address.address_id === formik.values.selectedAddress);
         dispatch(setSelectedAddress(selectedAddress!));
         if (cart) handleUpdateCart(cart['id'], 'ADDRESS_UPDATE', selectedAddress);
         router.push('/confirmation');
     }, [formik.values.selectedAddress])
 
-    if (!phone) return <>
-        <Center h={`calc(100vh - 80px)`}><span>Please enter a valid phone number!</span></Center> :
-    </>
+    // if (!phone) return <>
+    //     <Center h={`calc(100vh - 80px)`}><span>Please enter a valid phone number!</span></Center> :
+    // </>
 
     if (isLoading || showSpinner) return <>
         <Center h={`calc(100vh - 80px)`}><Spinner /></Center> :
@@ -121,7 +122,7 @@ export default function AddressList() {
                             <FormControl>
                                 <RadioGroup>
                                     {/* If only Unifill addresses exist */}
-                                    {(!data.turbo_address_list?.length && data.unifill_address_list?.length) ? data.unifill_address_list.map(address => {
+                                    {(!data.address_list?.length && data.address_list?.length) ? data.address_list.map(address => {
                                         return (
                                             <Box mb={2} key={address.address_id} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
                                                 <Radio key={address.address_id} colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={address.address_id} className={`${styles.radio}`}>
@@ -131,29 +132,29 @@ export default function AddressList() {
                                         );
                                     }) : null}
                                     {/* If only turbo addresses exist */}
-                                    {(!data.unifill_address_list?.length && data.turbo_address_list?.length) ? data.turbo_address_list.map(address => {
+                                    {(!data.address_list?.length && data.address_list?.length) ? data.address_list.map(address => {
                                         return (
                                             <Box mb={2} key={address.address_id} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
                                                 <Radio key={address.address_id} colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={address.address_id} className={`${styles.radio}`}>
-                                                    <AddressCard key={address.address_id} isInForm={true} address={address} selected={address.address_id === formik.values.selectedAddress} />
+                                                    <AddressCard key={address.address_id} isInForm={true} address={address} mobile={data.mobile} selected={address.address_id === formik.values.selectedAddress} />
                                                 </Radio>
                                             </Box>
                                         );
                                     }) : null}
                                     {/* If both addresses exist */}
-                                    {(data.unifill_address_list?.length && data.turbo_address_list?.length) ? (<>
-                                        {data.turbo_address_list.map(address => {
+                                    {(data.address_list?.length && data.address_list?.length) ? (<>
+                                        {data.address_list.map(address => {
                                             return (
                                                 <Box mb={2} key={address.address_id} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
                                                     <Radio key={address.address_id} colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={address.address_id} className={`${styles.radio}`}>
-                                                        <AddressCard key={address.address_id} isInForm={true} address={address} selected={address.address_id === formik.values.selectedAddress} />
+                                                        <AddressCard key={address.address_id} isInForm={true} address={address} mobile={data.mobile} selected={address.address_id === formik.values.selectedAddress} />
                                                     </Radio>
                                                 </Box>
                                             );
                                         })}
 
                                         {
-                                            showAllAddresses && data.unifill_address_list.map(address => {
+                                            showAllAddresses && data.address_list.map(address => {
                                                 return (
                                                     <Box key={address.address_id} mb={2} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
                                                         <Radio colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={address.address_id} className={`${styles.radio}`}>

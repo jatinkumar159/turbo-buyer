@@ -5,22 +5,22 @@ const baseUrl = 'https://turbo-dev.unicommerce.co.in/turbo'
 
 /********************************************** BUYER ***********************************************************/
 export async function verifyBuyer(phone: string): Promise<Response> {
-    const res = await gateway(`${baseUrl}/auth/v1/buyer/verify?mobile=${phone}`, `POST`, {});
+    const res = await gateway(`https://unifill.unicommerce.co.in/vas/auth/v1/otp?mobile=${phone}'`, `POST`, {});
     return res;
 }
 
 export async function sendOTP(phone: string, template: string): Promise<Response> {
-    const res = await gateway(`${baseUrl}/auth/v1/otp/send?mobile=${phone}&template=${template}`, `POST`, {});
+    const res = await gateway(`https://unifill.unicommerce.co.in/vas/auth/v1/otp?mobile=${phone}`, `POST`, {});
     return res;
 }
 
 export async function resendOTP(otpRequestId: string): Promise<Response> {
-    const res = await gateway(`${baseUrl}/auth/v1/otp/resend?otp_request_id=${otpRequestId}`, `POST`, {});
+    const res = await gateway(`https://unifill.unicommerce.co.in/vas/auth/v1/otp/resend?otp_request_id=${otpRequestId}`, `POST`, {});
     return res;
 }
 
 export async function verifyOTP(otpRequestId: string, otp?: string): Promise<Response> {
-    const res = await gateway(`${baseUrl}/auth/v1/otp/verify`, `POST`, JSON.stringify({
+    const res = await gateway(`https://unifill.unicommerce.co.in/vas/auth/v1/otp/verify`, `POST`, JSON.stringify({
             'otp_request_id': otpRequestId,
             'otp': otp,
         }),

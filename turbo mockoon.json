@@ -15,7 +15,7 @@
       "responses": [
         {
           "uuid": "92d6ef15-0113-4b4c-a39b-2ab2e61bc4ab",
-          "body": "{\n  \"is_guest_user\": false,\n  \"otp_request_id\": \"ef5be285-0838-444b-a5d7-02e311cec37d\"\n}",
+          "body": "{\n  \"is_guest_user\": false,\n  \"otp_request_id\": \"ef5be285-0838-444b-a5d7-02e311cec37d\"\n",
           "latency": 0,
           "statusCode": 200,
           "label": "NOT_GUEST_USER",
@@ -364,6 +364,33 @@
       ],
       "enabled": true,
       "responseMode": null
+    },
+    {
+      "uuid": "1a0f3710-6657-4c9c-b5ce-953827524b55",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "",
+      "responses": [
+        {
+          "uuid": "6d35a241-a9a5-4a78-8a61-822d19171992",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
     }
   ],
   "proxyMode": false,
@@ -395,6 +422,10 @@
     {
       "key": "Access-Control-Allow-Headers",
       "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    },
+    {
+      "key": "APP-KEY",
+      "value": "#$%^SK&SNLSH*^%SF"
     }
   ],
   "proxyReqHeaders": [

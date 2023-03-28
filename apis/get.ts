@@ -5,7 +5,7 @@ const baseUrl = 'https://turbo-dev.unicommerce.co.in/turbo'
 
 /********************************************** BUYER ***********************************************************/
 export async function getBuyerProfile(token: string): Promise<Addresses> {
-    const res = await gateway(`${baseUrl}/buyer/v1/profile`, 'GET');
+    const res = await gateway(`https://unifill.unicommerce.co.in/vas/v1/addresses?mobile=8983998599`, 'GET');
     return res.json();
 }
 

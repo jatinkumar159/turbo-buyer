@@ -165,8 +165,8 @@ export default function Confirmation() {
                 <Box className={`${styles.sectionContent} delivery-section`} mb={2} p={4}>
                     <Flex flexDir="row" w="100%" align="flex-start">
                         <Box flexGrow={1}>
-                            <Text>Deliver to <Text as="span" fontWeight="bold">{selectedAddress?.name.trim()}, {selectedAddress?.pincode || ''}</Text></Text>
-                            <Text mt={2} fontSize="xs">{selectedAddress?.address_line1}</Text>
+                            <Text>Deliver to <Text as="span" fontWeight="bold">{selectedAddress?.name.trim()}, {selectedAddress?.pin_code || ''}</Text></Text>
+                            <Text mt={2} fontSize="xs">{selectedAddress?.address_line_1}</Text>
                             <Text fontSize="xs" >{selectedAddress?.address_line2}</Text>
                             {selectedAddress?.mobile ? <Text mt={2} fontSize="xs">Mobile: +91 {selectedAddress?.mobile}</Text> : null}
                         </Box>

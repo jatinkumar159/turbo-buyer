@@ -75,41 +75,41 @@ export default function Profile() {
                     phone: Yup.string().length(10, 'Please enter a valid 10 digit mobile number.').required('Required'),
                 })}
                 validateOnBlur={false}
-                onSubmit={async (values) => {
+                onSubmit={(values) => {
                     try {
                         // IF TOKEN ALREADY EXISTS && NUMBER IS SAME
-                        const token = localStorage.getItem('turbo');
-                        if (token) {
-                            const decodedToken: Token = jwtDecode(token);
-                            if ((cleanPhoneNumber(decodedToken.sub) == values.phone) && Date.now() < (decodedToken.exp * 1000)) {
-                                dispatch(setPhone(values.phone));
-                                if (!cart) handleCreateCart(values.phone);
-                                dispatch(verifyProfile());
-                                router.push('/addresses');
-                                return;
-                            } else localStorage.removeItem('turbo');
-                        }
+                        // const token = localStorage.getItem('turbo');
+                        // if (token) {
+                        //     const decodedToken: Token = jwtDecode(token);
+                        //     if ((cleanPhoneNumber(decodedToken.sub) == values.phone) && Date.now() < (decodedToken.exp * 1000)) {
+                        //         dispatch(setPhone(values.phone));
+                        //         if (!cart) handleCreateCart(values.phone);
+                        //         dispatch(verifyProfile());
+                        //         router.push('/addresses');
+                        //         return;
+                        //     } else localStorage.removeItem('turbo');
+                        // }
 
-                        const res = await verifyBuyer(values.phone);
-                        const data = await res.json();
+                        // const res = await verifyBuyer(values.phone);
+                        // const data = await res.json();
 
-                        if (res.status !== 200) {
-                            showErrorToast(toast, data);
-                            return;
-                        }
+                        // if (res.status !== 200) {
+                        //     showErrorToast(toast, data);
+                        //     return;
+                        // }
 
-                        dispatch(setPhone(values.phone));
-                        handleCreateCart(values.phone);
-                        if (data.guest_user) {
-                            localStorage.setItem('turbo', data.token);
-                            dispatch(verifyProfile());
+                        // dispatch(setPhone(values.phone));
+                        // handleCreateCart(values.phone);
+                        // if (data.guest_user) {
+                        //     localStorage.setItem('turbo', data.token);
+                        //     dispatch(verifyProfile());
                             router.push('/addresses');
-                        }
-                        else setOtpRequestId(data.otp_request_id);
+                        // }
+                    //     else setOtpRequestId(data.otp_request_id);
                     } catch {
-                        showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
-                    }
-                }}
+                    //     showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
+                    // }
+                }}}
             >
                 {({ values, errors, touched, isSubmitting, handleBlur, handleChange, submitForm }) => (
                     <Flex flexDir={`column`} justifyContent={`space-between`} h={`100%`}>

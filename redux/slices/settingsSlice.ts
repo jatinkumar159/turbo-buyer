@@ -8,7 +8,7 @@ export interface SettingsState {
 }
 
 const initialState: SettingsState = {
-    otpLength: 4,
+    otpLength: 6,
     cartPayload: {
         "token": "c18e143e13e2edd58c3157254efad8af",
         "note": null,
