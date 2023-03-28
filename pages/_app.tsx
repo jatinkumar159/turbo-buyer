@@ -129,15 +129,15 @@ export default function App({ Component, pageProps }: AppProps) {
             <Flex flexDir="row" className={mulish.className}>
               <Flex className={styles.container} flexDir="column" grow={1}>
                 <Navigation />
-                <PromoBar />
+                {/* <PromoBar /> */}
                 {isPageTransitionActive ?
-                  <Center h={`calc(100vh - 80px)`}><Spinner /></Center> :
+                  <Center h={`calc(100vh - 3rem)`}><Spinner /></Center> :
                   <Component {...pageProps} className={styles.pageContainer} />
                 }
               </Flex>
-              <Flex className={styles.sidebar} bg={`gray.50`} p={4} pt={4}>
+              {/* <Flex className={styles.sidebar} bg={`gray.50`} p={4} pt={4}>
                 <Sidebar />
-              </Flex>
+              </Flex> */}
             </Flex>
           </QueryClientProvider>
         </ChakraProvider>

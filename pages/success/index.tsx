@@ -4,7 +4,7 @@ import styles from "./success.module.scss";
 
 export default function Success() {
     return (
-        <Flex className={styles.container} flexDir='column' h={'calc(100vh - 80px)'} justifyContent='space-between'>
+        <Flex className={styles.container} flexDir='column' h={'calc(100vh - 3rem)'} justifyContent='space-between'>
             <Center h={'100%'}>
                 <Flex flexDir='column' alignItems="center">
                     <CheckCircleIcon color='green' w='39px' h='39px' />

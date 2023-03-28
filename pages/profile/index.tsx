@@ -19,7 +19,7 @@ import { SearchCountry } from '../../components/SearchCountry/SearchCountry'
 import { ArrowForwardIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon } from '@chakra-ui/icons'
 import { selectCart, selectCartPayload, selectOtpLength, setCart } from '../../redux/slices/settingsSlice'
 import { showErrorToast } from '../../utils/toasts'
-import { getBuyerProfile } from '../../apis/get'
+import { fetchAddresses } from '../../apis/get'
 import jwtDecode from 'jwt-decode';
 import { Token } from '../../utils/interfaces'
 import PageFooter from '../../components/PageFooter/PageFooter'
@@ -75,41 +75,41 @@ export default function Profile() {
                     phone: Yup.string().length(10, 'Please enter a valid 10 digit mobile number.').required('Required'),
                 })}
                 validateOnBlur={false}
-                onSubmit={async (values) => {
+                onSubmit={(values) => {
                     try {
                         // IF TOKEN ALREADY EXISTS && NUMBER IS SAME
-                        const token = localStorage.getItem('turbo');
-                        if (token) {
-                            const decodedToken: Token = jwtDecode(token);
-                            if ((cleanPhoneNumber(decodedToken.sub) == values.phone) && Date.now() < (decodedToken.exp * 1000)) {
-                                dispatch(setPhone(values.phone));
-                                if (!cart) handleCreateCart(values.phone);
-                                dispatch(verifyProfile());
-                                router.push('/addresses');
-                                return;
-                            } else localStorage.removeItem('turbo');
-                        }
+                        // const token = localStorage.getItem('turbo');
+                        // if (token) {
+                        //     const decodedToken: Token = jwtDecode(token);
+                        //     if ((cleanPhoneNumber(decodedToken.sub) == values.phone) && Date.now() < (decodedToken.exp * 1000)) {
+                        //         dispatch(setPhone(values.phone));
+                        //         if (!cart) handleCreateCart(values.phone);
+                        //         dispatch(verifyProfile());
+                        //         router.push('/addresses');
+                        //         return;
+                        //     } else localStorage.removeItem('turbo');
+                        // }
 
-                        const res = await verifyBuyer(values.phone);
-                        const data = await res.json();
+                        // const res = await verifyBuyer(values.phone);
+                        // const data = await res.json();
 
-                        if (res.status !== 200) {
-                            showErrorToast(toast, data);
-                            return;
-                        }
+                        // if (res.status !== 200) {
+                        //     showErrorToast(toast, data);
+                        //     return;
+                        // }
 
                         dispatch(setPhone(values.phone));
-                        handleCreateCart(values.phone);
-                        if (data.guest_user) {
-                            localStorage.setItem('turbo', data.token);
-                            dispatch(verifyProfile());
+                        // handleCreateCart(values.phone);
+                        // if (data.guest_user) {
+                        //     localStorage.setItem('turbo', data.token);
+                        //     dispatch(verifyProfile());
                             router.push('/addresses');
-                        }
-                        else setOtpRequestId(data.otp_request_id);
+                        // }
+                    //     else setOtpRequestId(data.otp_request_id);
                     } catch {
-                        showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
-                    }
-                }}
+                    //     showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
+                    // }
+                }}}
             >
                 {({ values, errors, touched, isSubmitting, handleBlur, handleChange, submitForm }) => (
                     <Flex flexDir={`column`} justifyContent={`space-between`} h={`100%`}>
@@ -146,7 +146,7 @@ export default function Profile() {
                                             onChange={(e: ChangeEvent<HTMLInputElement>) => handleOnChange(e, handleChange, submitForm)}
                                         />
                                     </InputGroup>
-                                    <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                                    <FormErrorMessage justifyContent={`center`}>{errors.phone}</FormErrorMessage>
                                 </FormControl>
                                 <Box mt={8}>
                                     <Text fontSize={`sm`} textAlign={`center`}>By continuing, I agree to the <Link href={`https://unicommerce.com`} color={`--turbo-colors-link`} _hover={{ textDecor: 'underline' }}>Terms of Use </Link> & <Link color={`var(--turbo-colors-link)`} _hover={{ textDecor: 'underline' }}>Privacy Policy</Link></Text>
@@ -277,7 +277,8 @@ export default function Profile() {
     return (
         <>
             <Center className={styles.container}>
-                {(phone && !isVerified) ? <EnterOTP /> : <EnterPhone />}
+                {/* {(phone && !isVerified) ? <EnterOTP /> : <EnterPhone />} */}
+                <EnterPhone />
             </Center>
         </>
     )

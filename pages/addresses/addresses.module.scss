@@ -3,7 +3,7 @@
 .container {
     @extend .pageContainer;
     font-size: var(--chakra-fontSizes-sm);
-    min-height: calc(100vh - 80px);
+    min-height: calc(100vh - 3rem);
 }
 
 .section {

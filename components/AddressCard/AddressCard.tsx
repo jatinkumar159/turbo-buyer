@@ -6,11 +6,12 @@ import { Address } from "./../../utils/interfaces";
 
 interface Props {
     address: Address | undefined | null;
+    mobile?: string;
     selected?: boolean;
     isInForm: boolean;
 }
 
-export default function AddressCard({ address, selected, isInForm }: Props) {
+export default function AddressCard({ address, mobile, selected, isInForm }: Props) {
     const router = useRouter();
     if (!address) return <></>;
 
@@ -23,8 +24,12 @@ export default function AddressCard({ address, selected, isInForm }: Props) {
         }, 'edit-address');
     }
 
+    const handleContinueWithAddress = (e) => {
+        console.log(">> ", e);
+    }
+
     return (
-        <Box w={`100%`}>
+        <Box w={`100%`} onClick={()=>handleContinueWithAddress(address.address_id)}>
             <Flex align={'flex-start'} gap={'0.5rem'}>
                 <Flex grow={1} flexDir={'column'}>
                     {!isInForm ? (
@@ -48,8 +53,8 @@ export default function AddressCard({ address, selected, isInForm }: Props) {
                     </>
                     }
                     <Box mt={2}>
-                        <Text mb={2} fontSize={`xs`}>{`${address.address_line1 + ', ' + (address.address_line2 ? address.address_line2 + ', ' : '') + address.city + ', ' + (address.district ? address.district + ', ' : '') + address.state + ' - ' + address.pincode}`}</Text>
-                        <Text fontSize={`xs`}>Mobile: {`${address.mobile}`}</Text>
+                        <Text mb={2} fontSize={`xs`}>{`${address.address_line_1 + ', ' + (address.address_line2 ? address.address_line2 + ', ' : '') + address.city + ', ' + (address.district ? address.district + ', ' : '') + address.state + ' - ' + address.pin_code}`}</Text>
+                        <Text fontSize={`xs`}>Mobile: {`${mobile}`}</Text>
                     </Box>
                 </Flex>
             </Flex>
