@@ -19,17 +19,13 @@ export default function AddressCard({ address, mobile, selected, isInForm }: Pro
         router.push({
             pathname: '/edit-address',
             query: {
-                address_id: address.address_id,
+                address: JSON.stringify(address),
             }
         }, 'edit-address');
     }
 
-    const handleContinueWithAddress = (e) => {
-        console.log(">> ", e);
-    }
-
     return (
-        <Box w={`100%`} onClick={()=>handleContinueWithAddress(address.address_id)}>
+        <Box w={`100%`}>
             <Flex align={'flex-start'} gap={'0.5rem'}>
                 <Flex grow={1} flexDir={'column'}>
                     {!isInForm ? (

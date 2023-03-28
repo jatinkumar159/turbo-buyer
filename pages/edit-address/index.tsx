@@ -58,10 +58,9 @@ export default function EditAddress() {
     const phone = useAppSelector(selectPhone);
     const dispatch = useAppDispatch();
     const [loadingPincode, setLoadingPincode] = useState(false);
-    const { query: { address_id } } = router;
+    const { query: { address: address_ } } = router;
 
-    let address: Address | undefined = turboAddressList?.find(el => el.address_id === address_id);
-    if (!address) address = unifillAddressList?.find(el => el.address_id === address_id);
+    let address: Address = JSON.parse(address_ ? address_ as string : '') || {};
 
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'HOME',
@@ -101,7 +100,7 @@ export default function EditAddress() {
         }),
         onSubmit: async (values) => {
             try {
-                const res = await editAddress({ ...values, address_id: address!.address_id, district: 'Gurgaon' });
+                const res = await editAddress({ ...values });
                 const data = await res.json();
 
                 if (res.status !== 201) {

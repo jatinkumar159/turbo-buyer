@@ -62,8 +62,6 @@ export default function AddressList() {
     useEffect(() => {
         if (!data) return;
 
-        debugger;
-
         if (!data.address_list?.length && !data.address_list?.length) router.replace('/new-address');
 
         if (firstLoad['addresses'] && data.address_list?.length) {
@@ -74,17 +72,13 @@ export default function AddressList() {
             } else setShowSpinner(false);
         } else setShowSpinner(false);
 
-        dispatch(setTurboAddressList(data.address_list!));
+        // dispatch(setTurboAddressList(data.address_list!));
         // dispatch(setUnifillAddressList(data.address_list));
     }, [data])
 
     useEffect(() => {
-        console.log("changes")
         if (!formik.values.selectedAddress) return;
-        const selectedAddress =
-        data?.address_list?.find(address => address.address_id === formik.values.selectedAddress)
-        || data?.address_list?.find(address => address.address_id === formik.values.selectedAddress);
-        console.log(">> Selected Address", selectedAddress)
+        const selectedAddress = JSON.parse(formik.values.selectedAddress);
         dispatch(setSelectedAddress(selectedAddress!));
         if (cart) handleUpdateCart(cart['id'], 'ADDRESS_UPDATE', selectedAddress);
         router.push('/confirmation');
@@ -101,10 +95,6 @@ export default function AddressList() {
     if (isError) return <>
         <span>An error occurred, please try again later!</span>
     </>
-
-    const handleFormChange = (e:any ) => {
-        console.log(">> ", e);
-    } 
 
     return (
         <>
@@ -124,20 +114,18 @@ export default function AddressList() {
                 </Flex>
                 <Box flexGrow={1}>
                     <Box>
-                        <form onChange={handleFormChange}>
-                            <FormControl>
-                                <RadioGroup>
-                                    {data.address_list?.length ? data.address_list.map(address => {
-                                        return (
-                                            <Box mb={2} key={address.address_id} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
-                                                <Radio key={address.address_id} colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={address.address_id} className={`${styles.radio}`}>
+                        <form>
+                            <RadioGroup>
+                                {data.address_list?.length ? data.address_list.map((address, index) => {
+                                    return (
+                                        <Box mb={2} key={index} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
+                                            <Radio colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={JSON.stringify(address)} className={`${styles.radio}`}>
                                                 <AddressCard key={address.address_id} isInForm={true} address={address} mobile={data.mobile} selected={address.address_id === formik.values.selectedAddress} />
-                                                </Radio>
-                                            </Box>
-                                        );
-                                    }) : null}
-                                </RadioGroup>
-                            </FormControl>
+                                            </Radio>
+                                        </Box>
+                                    );
+                                }) : null}
+                            </RadioGroup>
                         </form>
                     </Box>
                 </Box>
