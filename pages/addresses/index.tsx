@@ -152,7 +152,7 @@ export default function AddressList() {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button variant='ghost' size="sm" mr={4}>Cancel</Button>
+                        <Button variant='ghost' size="sm" mr={4} onClick={onClose}>Cancel</Button>
                         <Button colorScheme='blue' onClick={() => {
                             onClose();
                             router.push('/confirmation');
