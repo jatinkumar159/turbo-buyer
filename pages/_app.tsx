@@ -21,7 +21,7 @@ const queryClient = new QueryClient()
 function InitApp() {
   const dispatch = useAppDispatch()
   const shopifyConfig = useShopifyConfig()
-  dispatch(setIsOtpRequired(true))
+  dispatch(setIsOtpRequired(shopifyConfig?['requireOtp']))
   return <></>
 }
 
