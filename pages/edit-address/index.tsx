@@ -6,7 +6,7 @@ import { fetchAddresses, getPostalAddress } from "../../apis/get";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { addAddress, selectTurboAddressList, selectUnifillAddressList, setSelectedAddress } from "../../redux/slices/addressSlice";
+import { addAddress, selectAddressList, selectTurboAddressList, selectUnifillAddressList, setSelectedAddress } from "../../redux/slices/addressSlice";
 import { showErrorToast } from "../../utils/toasts";
 import { editAddress } from "../../apis/put";
 import { Address } from "../../utils/interfaces";
@@ -61,7 +61,7 @@ export default function EditAddress() {
     const [loadingPincode, setLoadingPincode] = useState(false);
     const { query: { addressIndex } } = router;
 
-    const { isLoading, isError, data } = useQuery([phone], () => fetchAddresses(phone));
+    const data = useAppSelector(selectAddressList);
 
     let address = data?.address_list?.at(+addressIndex!);
 
@@ -145,14 +145,6 @@ export default function EditAddress() {
         dispatch(unverifyProfile());
         router.push("/profile");
     }
-
-    if (isLoading) return <>
-        <Center h={`calc(100vh - 3rem)`}><Spinner /></Center> :
-    </>
-
-    if (isError || !addressIndex) return <>
-        <Center h={`calc(100vh - 3rem)`}>An error occurred, please try again later!</Center>
-    </>
 
     if(!addressIndex) return <>
         <Center bg={`var(--turbo-colors-background)`} h={`calc(100vh - 10rem)`}><p>Invalid Address Selected, Please try again with another address!</p></Center>

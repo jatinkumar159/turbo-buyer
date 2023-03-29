@@ -2,12 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppState } from "../store";
 
 export interface SettingsState {
+    isOtpRequired: boolean;
     otpLength: number;
     cartPayload: any;
     cart: any;
 }
 
 const initialState: SettingsState = {
+    isOtpRequired: false,
     otpLength: 6,
     cartPayload: {
         "token": "c18e143e13e2edd58c3157254efad8af",
@@ -179,6 +181,9 @@ export const settingsSlice = createSlice({
     name: 'settings',
     initialState,
     reducers: {
+        setIsOtpRequired: (state, action: PayloadAction<boolean>) => {
+            state.isOtpRequired = action.payload;
+        },
         setOtpLength: (state, action: PayloadAction<number>) => {
             state.otpLength = action.payload;
         },
@@ -191,8 +196,9 @@ export const settingsSlice = createSlice({
     }
 });
 
-export const {setOtpLength, setCartPayload, setCart} = settingsSlice.actions;
+export const {setIsOtpRequired, setOtpLength, setCartPayload, setCart} = settingsSlice.actions;
 
+export const selectIsOtpRequired = (state: AppState) => state.settings.isOtpRequired;
 export const selectOtpLength = (state: AppState) => state.settings.otpLength;
 export const selectCartPayload = (state: AppState) => state.settings.cartPayload;
 export const selectCart = (state: AppState) => state.settings.cart;
