@@ -13,14 +13,22 @@ import Head from 'next/head'
 import useRouteChange from '../utils/hooks/useRouteChange'
 import { mulish, theme } from '../utils/configurations/chakraTheme'
 import useShopifyConfig from '../utils/hooks/useShopifyConfig'
+import { useAppDispatch } from '../redux/hooks'
+import { setIsOtpRequired } from '../redux/slices/settingsSlice'
 
 const queryClient = new QueryClient()
+
+function InitApp() {
+  const dispatch = useAppDispatch()
+  const shopifyConfig = useShopifyConfig()
+  dispatch(setIsOtpRequired(true))
+  return <></>
+}
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
   NProgress.settings.showSpinner = false
 
-  const shopifyConfig = useShopifyConfig()
   const isRouteChanging = useRouteChange(router)
 
   return (
@@ -34,6 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <Flex flexDir='row' className={mulish.className}>
               <Flex className={styles.container} flexDir='column' grow={1}>
                 <Navigation />
+                <InitApp />
                 {isRouteChanging ? (
                   <Center h={`calc(100vh - 3rem)`}>
                     <Spinner />

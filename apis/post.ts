@@ -9,7 +9,7 @@ export async function verifyBuyer(phone: string): Promise<Response> {
     return res;
 }
 
-export async function sendOTP(phone: string, template: string): Promise<Response> {
+export async function sendOTP(phone: string): Promise<Response> {
     const res = await gateway(`https://unifill.unicommerce.co.in/vas/auth/v1/otp?mobile=${phone}`, `POST`, {});
     return res;
 }

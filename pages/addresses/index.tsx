@@ -5,13 +5,13 @@ import AddressCard from "../../components/AddressCard/AddressCard";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { selectPhone, setName, unsetPhone, unverifyProfile } from "../../redux/slices/profileSlice";
 import { useQuery } from "@tanstack/react-query";
-import { fetchAddresses } from "../../apis/get";
+import { fetchAddresses, fetchAddressWithOtp } from "../../apis/get";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import { selectSelectedAddress, setSelectedAddress, setTurboAddressList, setUnifillAddressList } from "../../redux/slices/addressSlice";
+import { selectAddressList, selectSelectedAddress, setSelectedAddress, setTurboAddressList, setUnifillAddressList } from "../../redux/slices/addressSlice";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Formik, Form, useFormik } from "formik";
-import { selectCart, selectCartPayload, setCart } from "../../redux/slices/settingsSlice";
+import { selectCart, selectCartPayload, selectIsOtpRequired, setCart } from "../../redux/slices/settingsSlice";
 import { updateCart } from "../../apis/patch";
 import { createCart } from "../../apis/post";
 import { FaChevronDown, FaChevronRight, FaChevronUp } from 'react-icons/fa';
@@ -27,7 +27,8 @@ export default function AddressList() {
     const cart = useAppSelector(selectCart);
     const firstLoad = useAppSelector(selectFirstLoad);
     const cartPayload = useAppSelector(selectCartPayload);
-    const { isLoading, isError, data } = useQuery([phone], () => fetchAddresses(phone));
+
+    const data = useAppSelector(selectAddressList);
 
     const [showAllAddresses, setShowAllAddresses] = useState(false);
     const [showSpinner, setShowSpinner] = useState(firstLoad['addresses'] ? true : false);
@@ -86,18 +87,6 @@ export default function AddressList() {
         router.push('/confirmation');
     }, [formik.values.selectedAddress])
 
-    // if (!phone) return <>
-    //     <Center h={`calc(100vh - 3rem)`}><span>Please enter a valid phone number!</span></Center> :
-    // </>
-
-    if (isLoading || showSpinner) return <>
-        <Center h={`calc(100vh - 3rem)`}><Spinner /></Center> :
-    </>
-
-    if (isError) return <>
-        <span>An error occurred, please try again later!</span>
-    </>
-
     return (
         <>
             <Flex className={styles.container} flexDir={`column`}>
@@ -118,7 +107,7 @@ export default function AddressList() {
                     <Box>
                         <form>
                             <RadioGroup>
-                                {data.address_list?.length ? data.address_list.map((address, index) => {
+                                {data?.address_list?.length ? data?.address_list.map((address, index) => {
                                     return (
                                         <Box mb={2} key={index} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
                                             <Radio colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={index.toString()} className={`${styles.radio}`}>

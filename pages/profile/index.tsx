@@ -17,13 +17,14 @@ import styles from './profile.module.scss'
 import { useRouter } from 'next/router'
 import { SearchCountry } from '../../components/SearchCountry/SearchCountry'
 import { ArrowForwardIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon } from '@chakra-ui/icons'
-import { selectCart, selectCartPayload, selectOtpLength, setCart } from '../../redux/slices/settingsSlice'
+import { selectCart, selectCartPayload, selectIsOtpRequired, selectOtpLength, setCart } from '../../redux/slices/settingsSlice'
 import { showErrorToast } from '../../utils/toasts'
-import { fetchAddresses } from '../../apis/get'
+import { fetchAddresses, fetchAddressWithOtp } from '../../apis/get'
 import jwtDecode from 'jwt-decode';
 import { Token } from '../../utils/interfaces'
 import PageFooter from '../../components/PageFooter/PageFooter'
 import cleanPhoneNumber from '../../utils/cleanPhoneNumber'
+import { setAddressList } from '../../redux/slices/addressSlice'
 
 export default function Profile() {
     const dispatch = useAppDispatch()
@@ -33,8 +34,10 @@ export default function Profile() {
     const cart = useAppSelector(selectCart);
     const cartPayload = useAppSelector(selectCartPayload);
     const isVerified = useAppSelector(selectIsVerified);
+    const isOtpRequired = useAppSelector(selectIsOtpRequired);
     const toast = useToast();
     const { query: { PHONE } } = router;
+    console.log('phone >> ', phone, 'isVerified >> ', isVerified, 'isOtpRequired >>', isOtpRequired)
 
     const [otpRequestId, setOtpRequestId] = useState<string>('');
 
@@ -75,41 +78,50 @@ export default function Profile() {
                     phone: Yup.string().length(10, 'Please enter a valid 10 digit mobile number.').required('Required'),
                 })}
                 validateOnBlur={false}
-                onSubmit={(values) => {
+                onSubmit={async (values) => {
                     try {
+
+                        if(!isOtpRequired) {
+                            const data = await fetchAddresses(values.phone);
+                            dispatch(setAddressList(data))
+                            router.push('/addresses')
+                            return;
+                        }
+
                         // IF TOKEN ALREADY EXISTS && NUMBER IS SAME
-                        // const token = localStorage.getItem('turbo');
-                        // if (token) {
-                        //     const decodedToken: Token = jwtDecode(token);
-                        //     if ((cleanPhoneNumber(decodedToken.sub) == values.phone) && Date.now() < (decodedToken.exp * 1000)) {
-                        //         dispatch(setPhone(values.phone));
-                        //         if (!cart) handleCreateCart(values.phone);
-                        //         dispatch(verifyProfile());
-                        //         router.push('/addresses');
-                        //         return;
-                        //     } else localStorage.removeItem('turbo');
-                        // }
+                        const token = localStorage.getItem('turbo');
+                        if (token) {
+                            const decodedToken: Token = jwtDecode(token);
+                            if ((cleanPhoneNumber(decodedToken.sub) == values.phone) && Date.now() < (decodedToken.exp * 1000)) {
+                                dispatch(setPhone(values.phone));
+                                if (!cart) handleCreateCart(values.phone);
+                                dispatch(verifyProfile());
+                                router.push('/addresses');
+                                return;
+                            } else localStorage.removeItem('turbo');
+                        }
 
-                        // const res = await verifyBuyer(values.phone);
-                        // const data = await res.json();
+                        const res = await sendOTP(values.phone);
+                        const data = await res.json();
 
-                        // if (res.status !== 200) {
-                        //     showErrorToast(toast, data);
-                        //     return;
-                        // }
+                        if (res.status !== 200) {
+                            showErrorToast(toast, data);
+                            return;
+                        }
 
                         dispatch(setPhone(values.phone));
                         // handleCreateCart(values.phone);
                         // if (data.guest_user) {
                         //     localStorage.setItem('turbo', data.token);
                         //     dispatch(verifyProfile());
-                            router.push('/addresses');
+                        //     router.push('/addresses');
                         // }
-                    //     else setOtpRequestId(data.otp_request_id);
+                        // else 
+                        setOtpRequestId(data.otp_request_id);
                     } catch {
-                    //     showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
-                    // }
-                }}}
+                        showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
+                    }
+                }}
             >
                 {({ values, errors, touched, isSubmitting, handleBlur, handleChange, submitForm }) => (
                     <Flex flexDir={`column`} justifyContent={`space-between`} h={`100%`}>
@@ -216,19 +228,23 @@ export default function Profile() {
                 onSubmit={async (values) => {
                     const otp = inputs.reduce((acc, curr) => acc + values[curr] ?? '', '');
                     try {
-                        const res = await verifyOTP(otpRequestId, otp);
+                        const res = await fetchAddressWithOtp(otp, otpRequestId, phone);
                         const data = await res.json();
 
-                        if (res.status !== 200) {
+                        if(!res.ok) {
                             showErrorToast(toast, data.api_error);
                             setIsOtpInvalid(true);
                             return;
                         }
 
-                        if (data.token) {
+                        if(data.token) {
                             localStorage.setItem('turbo', data.token);
+                        }
+
+                        if (data.address_list) {
                             setIsOtpInvalid(false);
                             dispatch(verifyProfile());
+                            dispatch(setAddressList(data));
                             router.push('/addresses');
                         } else {
                             setIsOtpInvalid(true);
@@ -277,8 +293,7 @@ export default function Profile() {
     return (
         <>
             <Center className={styles.container}>
-                {/* {(phone && !isVerified) ? <EnterOTP /> : <EnterPhone />} */}
-                <EnterPhone />
+                {(isOtpRequired && phone && !isVerified) ? <EnterOTP /> : <EnterPhone />}
             </Center>
         </>
     )
