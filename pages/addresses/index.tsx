@@ -155,7 +155,7 @@ export default function AddressList() {
                         <Button variant='ghost' size="sm" mr={4} onClick={onClose}>Cancel</Button>
                         <Button colorScheme='blue' onClick={() => {
                             onClose();
-                            router.push('/confirmation');
+                            window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify(selectedAddress)}, '*');
                         }} size="sm">
                             Proceed
                         </Button>
