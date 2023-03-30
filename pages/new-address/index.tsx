@@ -99,16 +99,17 @@ export default function NewAddress() {
         }),
         onSubmit: async (values) => {
             try {
-                const res = await addNewAddress({ ...values, district: 'Gurgaon' });
-                const data = await res.json();
+                // const res = await addNewAddress({ ...values, district: 'Gurgaon' });
+                // const data = await res.json();
 
-                if (res.status !== 201) {
-                    showErrorToast(toast, data.api_error);
-                    return;
-                }
+                // if (res.status !== 201) {
+                //     showErrorToast(toast, data.api_error);
+                //     return;
+                // }
 
-                dispatch(setSelectedAddress({ ...values, district: 'Gurgaon', address_type: 'Home', selected: true, address_id: data.address_id }));
-                router.replace('/confirmation');
+                // dispatch(setSelectedAddress({ ...values, district: 'Gurgaon', address_type: 'Home', selected: true, address_id: data.address_id }));
+                // router.replace('/confirmation');
+                window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify(values)}, '*');
             } catch {
                 showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
             }
