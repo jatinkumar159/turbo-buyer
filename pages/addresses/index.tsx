@@ -124,11 +124,11 @@ export default function AddressList() {
                     </Box>
                 </Box>
                 <Box py={2} px={4} className={styles.pageFooter}>
-                    <Link href="/new-address">
+                    {/* <Link href="/new-address">
                         <Button fontSize={`sm`} variant={`outline`} type="submit" w={`100%`} colorScheme={`black`} textTransform={`uppercase`}>
                             Add new Address
                         </Button>
-                    </Link>
+                    </Link> */}
                     <PageFooter />
                 </Box>
             </Flex>
@@ -141,11 +141,11 @@ export default function AddressList() {
                     <ModalBody >
                     <Flex flexDir="row" w="100%" align="flex-start">
                         <Box flexGrow={1}>
-                            <Text mb={4}>Deliver to the following address:</Text>
+                            <Text>Deliver to the following address:</Text>
                             <Text as="p" fontWeight="bold">{selectedAddress?.name.trim()},</Text>
-                            <Text fontSize="xs">{selectedAddress?.address_line_1}</Text>
-                            <Text fontSize="xs" >{selectedAddress?.address_line2}</Text>
-                            <Text fontSize="xs">{selectedAddress?.pin_code || ''}</Text>
+                            <Text fontSize="sm">{selectedAddress?.address_line1}</Text>
+                            <Text fontSize="sm" >{selectedAddress?.address_line2}</Text>
+                            <Text fontSize="sm">{selectedAddress?.pin_code || ''}</Text>
                             {selectedAddress?.mobile ? <Text mt={2} fontSize="xs">Mobile: +91 {selectedAddress?.mobile}</Text> : null}
                         </Box>
                     </Flex>

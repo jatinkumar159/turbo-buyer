@@ -84,6 +84,7 @@ export default function Profile() {
                         if(!isOtpRequired) {
                             const data = await fetchAddresses(values.phone);
                             dispatch(setAddressList(data))
+                            dispatch(setPhone(values.phone))
                             router.push('/addresses')
                             return;
                         }

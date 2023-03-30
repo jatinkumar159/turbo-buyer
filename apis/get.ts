@@ -1,16 +1,16 @@
 import { Addresses } from "../utils/interfaces";
 import gateway from './gateway';
 
-const baseUrl = 'https://turbo-dev.unicommerce.co.in/turbo'
-
+//const baseUrl = 'https://unifill.unicommerce.co.in';
+const baseUrl = 'http://localhost:8080'; //'https://unifill.unicommerce.co.in';
 /********************************************** BUYER ***********************************************************/
 export async function fetchAddresses(phone: string): Promise<Addresses> {
-    const res = await gateway(`https://unifill.unicommerce.co.in/vas/v1/addresses?mobile=${phone}`, 'GET');
+    const res = await gateway(`${baseUrl}/vas/v1/addresses?mobile=${phone}`, 'GET');
     return res.json();
 }
 
 export async function fetchAddressWithOtp(otp: string, otp_request_id: string, mobile: string): Promise<Response> {
-    const res = await gateway(`https://unifill.unicommerce.co.in/vas/v1/addresses?otp=${otp}&otp_request_id=${otp_request_id}&mobile=${mobile}`, 'GET');
+    const res = await gateway(`${baseUrl}/vas/v1/addresses?otp=${otp}&otp_request_id=${otp_request_id}&mobile=${mobile}`, 'GET');
     return res;
 }
 

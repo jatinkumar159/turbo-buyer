@@ -45,12 +45,12 @@ export default function AddressCard({ address, mobile, selected, isInForm, index
                                 <Text as="span" fontSize={'md'}>{address.name}</Text>
                                 <Text as="span" className={styles.cardChip}>{address.address_type}</Text>
                             </Text>
-                            <Text className={styles.editCardLink} lineHeight={1} as="span" onClick={handleAddressClick}>Edit</Text>
+                            {/* <Text className={styles.editCardLink} lineHeight={1} as="span" onClick={handleAddressClick}>Edit</Text> */}
                         </Flex>
                     </>
                     }
                     <Box mt={2}>
-                        <Text mb={2} fontSize={`xs`}>{`${address.address_line_1 + ', ' + (address.address_line2 ? address.address_line2 + ', ' : '') + address.city + ', ' + (address.district ? address.district + ', ' : '') + address.state + ' - ' + address.pin_code}`}</Text>
+                        <Text mb={2} fontSize={`sm`}>{`${address.address_line1 + ', ' + (address.address_line2 ? address.address_line2 + ', ' : '') + address.city + ', ' + (address.district ? address.district + ', ' : '') + address.state + ' - ' + address.pin_code}`}</Text>
                         <Text fontSize={`xs`}>Mobile: {`${mobile}`}</Text>
                     </Box>
                 </Flex>

@@ -77,14 +77,14 @@ export default function NewAddress() {
             pincode: '',
             city: '',
             state: '',
-            address_line_1: '',
+            address_line1: '',
             address_line2: '',
             country: '',
             address_type: 'HOME',
         },
         validationSchema: Yup.object({
             name: Yup.string().required('This is a mandatory field.'),
-            address_line_1: Yup.string().required('This is a mandatory field.'),
+            address_line1: Yup.string().required('This is a mandatory field.'),
             city: Yup.string().required('This is a mandatory field.'),
             state: Yup.string().required('This is a mandatory field.'),
             country: Yup.string().required('This is a mandatory field.'),
@@ -202,10 +202,10 @@ export default function NewAddress() {
                                 <FormErrorMessage fontSize={`xs`}>{formik.errors.state}</FormErrorMessage>
                             </FormControl>
                         </Flex>
-                        <FormControl variant="floating" mb={4} isInvalid={formik.touched.address_line_1 && formik.errors.address_line_1 ? true : false}>
-                            <Input type="text" placeholder="House no." aria-placeholder="house, road" {...formik.getFieldProps('address_line_1')}></Input>
-                            <FormLabel ps={4} htmlFor="address_line_1">Address Line 1</FormLabel>
-                            <FormErrorMessage fontSize={`xs`}>{formik.errors.address_line_1}</FormErrorMessage>
+                        <FormControl variant="floating" mb={4} isInvalid={formik.touched.address_line1 && formik.errors.address_line1 ? true : false}>
+                            <Input type="text" placeholder="House no." aria-placeholder="house, road" {...formik.getFieldProps('address_line1')}></Input>
+                            <FormLabel ps={4} htmlFor="address_line1">Address Line 1</FormLabel>
+                            <FormErrorMessage fontSize={`xs`}>{formik.errors.address_line1}</FormErrorMessage>
                         </FormControl>
                         <FormControl variant="floating" mb={4} isInvalid={formik.touched.address_line2 && formik.errors.address_line2 ? true : false}>
                             <Input type="text" placeholder="Locality" aria-placeholder="Locality, Landmark" {...formik.getFieldProps('address_line2')}></Input>
