@@ -1,4 +1,4 @@
-import { Box, Button, Center, Checkbox, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftAddon, InputRightAddon, Link, Radio, RadioGroup, Spinner, Text, useRadio, useRadioGroup, useToast } from "@chakra-ui/react";
+import { Box, Button, Center, Checkbox, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftAddon, InputRightAddon, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Spinner, Text, useDisclosure, useRadio, useRadioGroup, useToast } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import styles from './new-address.module.scss';
 import * as Yup from 'yup';
@@ -59,6 +59,8 @@ export default function NewAddress() {
     const [loadingPincode, setLoadingPincode] = useState(false);
     const options = ['HOME', 'WORK', 'OTHER']
 
+    const {isOpen, onOpen, onClose} = useDisclosure();
+
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'HOME',
         defaultValue: 'HOME',
@@ -109,7 +111,8 @@ export default function NewAddress() {
 
                 // dispatch(setSelectedAddress({ ...values, district: 'Gurgaon', address_type: 'Home', selected: true, address_id: data.address_id }));
                 // router.replace('/confirmation');
-                window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify(values)}, '*');
+                // window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify(values)}, '*');
+                onOpen()
             } catch {
                 showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
             }
@@ -238,6 +241,36 @@ export default function NewAddress() {
                     <PageFooter />
                 </Box>
             </Flex>
+
+            <Modal isCentered={true} isOpen={isOpen} onClose={onClose} motionPreset="none">
+                <ModalOverlay/>
+                <ModalContent>
+                    <ModalHeader>Are you sure?</ModalHeader>
+                    <ModalCloseButton mt={1}/>
+                    <ModalBody >
+                    <Flex flexDir="row" w="100%" align="flex-start">
+                        <Box flexGrow={1}>
+                            <Text>Deliver to the following address:</Text>
+                            <Text as="p" fontWeight="bold">{formik.values.name.trim()},</Text>
+                            <Text fontSize="sm">{formik.values?.address_line1}</Text>
+                            <Text fontSize="sm" >{formik.values?.address_line2}</Text>
+                            <Text fontSize="sm">{formik.values?.pincode || ''}</Text>
+                            {formik.values?.mobile ? <Text mt={2} fontSize="xs">Mobile: +91 {formik.values?.mobile}</Text> : null}
+                        </Box>
+                    </Flex>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button variant='ghost' size="sm" mr={4} onClick={onClose}>Cancel</Button>
+                        <Button colorScheme='blue' onClick={() => {
+                            onClose();
+                            window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify(formik.values)}, '*');
+                        }} size="sm">
+                            Proceed
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
 
         </>
     )
