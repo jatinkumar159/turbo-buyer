@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { selectFlowMap, setFirstLoad } from '../../redux/slices/navigationSlice';
-import { selectIsVerified, selectPhone, unsetPhone } from '../../redux/slices/profileSlice';
+import { selectIsVerified, selectPhone, unsetPhone, unverifyProfile } from '../../redux/slices/profileSlice';
 import imageLoader from '../../utils/imageLoader';
 import styles from './Navigation.module.scss';
 
@@ -21,6 +21,10 @@ export default function Navigation() {
         if (router.pathname === '/profile' && phone && !isVerified) {
             dispatch(unsetPhone());
             return;
+        }
+        if(router.pathname === "/addresses") {
+            dispatch(unsetPhone());
+            dispatch(unverifyProfile());
         }
         if (router.pathname === '/confirmation') dispatch(setFirstLoad('addresses'));
         router.back();
