@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { selectFlowMap, setFirstLoad } from '../../redux/slices/navigationSlice';
 import { selectIsVerified, selectPhone, unsetPhone, unverifyProfile } from '../../redux/slices/profileSlice';
+import { selectBrandLogoUrl } from '../../redux/slices/settingsSlice';
 import imageLoader from '../../utils/imageLoader';
 import styles from './Navigation.module.scss';
 
@@ -15,6 +16,7 @@ export default function Navigation() {
     const phone = useAppSelector(selectPhone);
     const flowMap = useAppSelector(selectFlowMap);
     const isVerified = useAppSelector(selectIsVerified);
+    const brandLogoUrl = useAppSelector(selectBrandLogoUrl);
 
     const handleBackNavigation = () => {
         console.log(router.pathname);
@@ -44,7 +46,7 @@ export default function Navigation() {
                 <Text as="span" fontSize="sm" fontWeight="bold">{flowMap[router.pathname]?.title}</Text>
             </div>
             <div className={styles.attribution}>
-                <Image loader={imageLoader} src={'https://infowordpress.s3.ap-south-1.amazonaws.com/wp-content/uploads/2022/10/06114711/logo.webp'} alt="Logo" width='70' height='50' priority />
+                {brandLogoUrl && <Image loader={imageLoader} src={brandLogoUrl} alt="Logo" width='70' height='50' priority style={{height: 40, width: 'auto', objectFit: 'contain'}}/>}
             </div>
         </div>
     )

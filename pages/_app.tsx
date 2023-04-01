@@ -14,16 +14,25 @@ import useRouteChange from '../utils/hooks/useRouteChange'
 import { mulish, theme } from '../utils/configurations/chakraTheme'
 import useShopifyConfig from '../utils/hooks/useShopifyConfig'
 import { useAppDispatch } from '../redux/hooks'
-import { setIsOtpRequired } from '../redux/slices/settingsSlice'
+import { setBrandLogoUrl, setIsOtpRequired } from '../redux/slices/settingsSlice'
+import { useEffect } from 'react'
 
 const queryClient = new QueryClient()
 
 function InitApp() {
   const dispatch = useAppDispatch()
   const shopifyConfig: any = useShopifyConfig()
-  dispatch(setIsOtpRequired(shopifyConfig.requireOtp))
+  
+  useEffect(() => {
+    if(shopifyConfig?.hasOwnProperty('requireOtp')) {
+      dispatch(setIsOtpRequired(shopifyConfig.requireOtp))
+      dispatch(setBrandLogoUrl(shopifyConfig.brandLogoUrl));
+    }
+  }, [shopifyConfig]);
+
   return <></>
 }
+
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
