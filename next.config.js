@@ -16,4 +16,15 @@ const nextConfig = {
   // assetPrefix: './'
 }
 
-module.exports = nextConfig
+module.exports = {
+  async redirects() {
+      return [
+          {
+              source: '/',
+              destination: '/profile',
+              permanent: true,
+          },
+      ]
+  },
+  ...nextConfig,
+}
