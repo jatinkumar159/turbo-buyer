@@ -32,21 +32,21 @@ export default function AddressList() {
     }, [formik.values.selectedAddress])
 
     if(!addresses || !addresses.length) return (
-        <>
-        <Box onClick={handleChangeNumber}>
-            <Flex className={styles.section} ps={4} pe={4} pt={2} pb={2} align={`center`} mb={2}>
-                <Box className={`${styles.sectionContent}`} flexGrow={1}>
-                    <Text fontWeight={`bold`}>Your number <Text as="span" ms={4} fontWeight={`bold`}>{phone}</Text></Text>
-                </Box>
-                <Box>
-                    <Text><FaChevronRight /></Text>
-                </Box>
-            </Flex>
-        </Box>
-        <Center h={`calc(100dvh - 8rem)`}>
-            <Text>No Addresses Found!</Text>
-        </Center>
-        </>
+        <Flex className={styles.container} flexDir={`column`}>
+            <Box onClick={handleChangeNumber}>
+                <Flex className={styles.section} ps={4} pe={4} pt={2} pb={2} align={`center`} mb={2}>
+                    <Box className={`${styles.sectionContent}`} flexGrow={1}>
+                        <Text fontWeight={`bold`}>Your number <Text as="span" ms={4} fontWeight={`bold`}>{phone}</Text></Text>
+                    </Box>
+                    <Box>
+                        <Text><FaChevronRight /></Text>
+                    </Box>
+                </Flex>
+            </Box>
+            <Center h={`calc(100dvh - 8rem)`}>
+                <Text>No Addresses Found!</Text>
+            </Center>
+        </Flex>
     )
 
     return (
