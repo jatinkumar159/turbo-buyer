@@ -12,18 +12,9 @@ import 'nprogress/nprogress.css'
 import Head from 'next/head'
 import useRouteChange from '../utils/hooks/useRouteChange'
 import { mulish, theme } from '../utils/configurations/chakraTheme'
-import useShopifyConfig from '../utils/hooks/useShopifyConfig'
-import { useAppDispatch } from '../redux/hooks'
-import { setIsOtpRequired } from '../redux/slices/settingsSlice'
+import ShopifyConfigProvider from '../utils/providers/ShopifyConfigProvider'
 
 const queryClient = new QueryClient()
-
-function InitApp() {
-  const dispatch = useAppDispatch()
-  const shopifyConfig: any = useShopifyConfig()
-  dispatch(setIsOtpRequired(shopifyConfig.requireOtp))
-  return <></>
-}
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -39,19 +30,23 @@ export default function App({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <ChakraProvider theme={theme}>
           <QueryClientProvider client={queryClient}>
-            <Flex flexDir='row' className={mulish.className}>
-              <Flex className={styles.container} flexDir='column' grow={1}>
-                <Navigation />
-                <InitApp />
-                {isRouteChanging ? (
-                  <Center h={`calc(100vh - 3rem)`}>
-                    <Spinner />
-                  </Center>
-                ) : (
-                  <Component {...pageProps} className={styles.pageContainer} />
-                )}
+            <ShopifyConfigProvider>
+              <Flex flexDir='row' className={mulish.className}>
+                <Flex className={styles.container} flexDir='column' grow={1}>
+                  <Navigation />
+                  {isRouteChanging ? (
+                    <Center h={`calc(100vh - 3rem)`}>
+                      <Spinner />
+                    </Center>
+                  ) : (
+                    <Component
+                      {...pageProps}
+                      className={styles.pageContainer}
+                    />
+                  )}
+                </Flex>
               </Flex>
-            </Flex>
+            </ShopifyConfigProvider>
           </QueryClientProvider>
         </ChakraProvider>
       </Provider>

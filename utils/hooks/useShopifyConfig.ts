@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
+import {
+  INIT_SHOPIFY_CONFIG,
+  ShopifyConfig,
+} from '../providers/ShopifyConfigProvider'
 
 export default function useShopifyConfig() {
-  const [config, setConfig] = useState({})
+  const [config, setConfig] = useState<ShopifyConfig>(INIT_SHOPIFY_CONFIG)
 
   useEffect(() => {
     const handler = (message: MessageEvent) => {
@@ -10,7 +14,7 @@ export default function useShopifyConfig() {
         !message.data.type ||
         message.data.type.indexOf('TURBO') === -1
       ) {
-        setConfig({})
+        setConfig(INIT_SHOPIFY_CONFIG)
         return
       }
 

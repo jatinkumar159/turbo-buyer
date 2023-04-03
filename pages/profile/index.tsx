@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEventHandler, useEffect, useState } from 'react'
+import { ChangeEvent, KeyboardEventHandler, useContext, useEffect, useState } from 'react'
 import { Form, Formik } from 'formik'
 import {
     Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftAddon, PinInput, PinInputField, Progress, useToast, VStack, useDisclosure,
@@ -25,30 +25,20 @@ import { Token } from '../../utils/interfaces'
 import PageFooter from '../../components/PageFooter/PageFooter'
 import cleanPhoneNumber from '../../utils/cleanPhoneNumber'
 import { setAddressList } from '../../redux/slices/addressSlice'
+import { ShopifyConfigContext } from '../../utils/providers/ShopifyConfigProvider'
 
 export default function Profile() {
     const dispatch = useAppDispatch()
     const router = useRouter();
 
     const phone = useAppSelector(selectPhone);
-    const cart = useAppSelector(selectCart);
-    const cartPayload = useAppSelector(selectCartPayload);
     const isVerified = useAppSelector(selectIsVerified);
-    const isOtpRequired = useAppSelector(selectIsOtpRequired);
     const toast = useToast();
     const { query: { PHONE } } = router;
-    console.log('phone >> ', phone, 'isVerified >> ', isVerified, 'isOtpRequired >>', isOtpRequired)
+
+    const { requireOtp } = useContext(ShopifyConfigContext);
 
     const [otpRequestId, setOtpRequestId] = useState<string>('');
-
-    const handleCreateCart = async (phone: string) => {
-        const res = await createCart('SHOPIFY', 'mid4', phone, cartPayload, undefined);
-        const data = await res.json();
-
-        if (data.hasOwnProperty('cart')) {
-            dispatch(setCart(data.cart));
-        }
-    }
 
     const handleChangePhone = () => {
         dispatch(unsetPhone());
@@ -81,25 +71,12 @@ export default function Profile() {
                 onSubmit={async (values) => {
                     try {
 
-                        if(!isOtpRequired) {
+                        if(!requireOtp) {
                             const data = await fetchAddresses(values.phone);
                             dispatch(setAddressList(data))
                             dispatch(setPhone(values.phone))
                             router.push('/addresses')
                             return;
-                        }
-
-                        // IF TOKEN ALREADY EXISTS && NUMBER IS SAME
-                        const token = localStorage.getItem('turbo');
-                        if (token) {
-                            const decodedToken: Token = jwtDecode(token);
-                            if ((cleanPhoneNumber(decodedToken.sub) == values.phone) && Date.now() < (decodedToken.exp * 1000)) {
-                                dispatch(setPhone(values.phone));
-                                if (!cart) handleCreateCart(values.phone);
-                                dispatch(verifyProfile());
-                                router.push('/addresses');
-                                return;
-                            } else localStorage.removeItem('turbo');
                         }
 
                         const res = await sendOTP(values.phone);
@@ -111,13 +88,6 @@ export default function Profile() {
                         }
 
                         dispatch(setPhone(values.phone));
-                        // handleCreateCart(values.phone);
-                        // if (data.guest_user) {
-                        //     localStorage.setItem('turbo', data.token);
-                        //     dispatch(verifyProfile());
-                        //     router.push('/addresses');
-                        // }
-                        // else 
                         setOtpRequestId(data.otp_request_id);
                     } catch {
                         showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
@@ -294,7 +264,7 @@ export default function Profile() {
     return (
         <>
             <Center className={styles.container}>
-                {(isOtpRequired && phone && !isVerified) ? <EnterOTP /> : <EnterPhone />}
+                {(requireOtp && phone && !isVerified) ? <EnterOTP /> : <EnterPhone />}
             </Center>
         </>
     )
