@@ -12,8 +12,6 @@ export default function Profile() {
 
   const [otpRequestId, setOtpRequestId] = useState<string>('')
 
-  console.log(requireOtp, phone, isVerified)
-
   if (!requireOtp)
     return (
       <Center className={styles.container}>

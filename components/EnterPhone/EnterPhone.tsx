@@ -14,10 +14,9 @@ import {
 import { Formik, Form } from 'formik'
 import Link from 'next/link'
 import router from 'next/router'
-import { ChangeEvent, Dispatch, SetStateAction, useContext } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useContext, useEffect, useRef } from 'react'
 import { fetchAddresses } from '../../apis/get'
 import { sendOTP } from '../../apis/post'
-import { setAddressList } from '../../redux/slices/addressSlice'
 import { showErrorToast } from '../../utils/toasts'
 import PageFooter from '../PageFooter/PageFooter'
 import * as Yup from 'yup'
@@ -45,7 +44,12 @@ export default function EnterPhone({ setOtpRequestId }: Props) {
 
   const { requireOtp } = useContext(ShopifyConfigContext)
   const { setPhone } = useContext(UserContext)
+  const inputRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
+
+  useEffect(() => {
+    inputRef?.current?.focus()
+  }, [])
 
   return (
     <Formik
@@ -121,6 +125,7 @@ export default function EnterPhone({ setOtpRequestId }: Props) {
                     placeholder='Phone Number'
                     errorBorderColor='var(--turbo-colors-red)'
                     autoFocus
+                    ref={inputRef}
                     value={values.phone}
                     onBlur={handleBlur}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
