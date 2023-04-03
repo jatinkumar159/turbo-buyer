@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ReactNode } from 'react'
 
 export type User = {
@@ -23,6 +23,26 @@ export default function UserProvider({ children }: { children: ReactNode }) {
   const [phone, setPhone] = useState<string | null>(INIT_USER.phone)
   const [isVerified, setIsVerified] = useState<boolean>(INIT_USER.isVerified)
   const [addresses, setAddresses] = useState<any[]>(INIT_USER.addresses)
+
+  useEffect(() => {
+    // TODO: API STUFF HERE
+    const handler = (message: MessageEvent) => {
+      if (
+        !message.data ||
+        !message.data.type ||
+        message.data.type.indexOf('TURBO_CALL') === -1
+      )
+        return
+
+      console.log('Shopify CALL >> ', message.data)
+
+      setAddresses(message.data.addresses)
+    }
+
+    window.addEventListener('message', handler)
+
+    return () => window.removeEventListener('message', handler)
+  })
 
   return (
     <UserContext.Provider
