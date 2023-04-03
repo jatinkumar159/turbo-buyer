@@ -2,32 +2,23 @@ import { ArrowBackIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import { IconButton, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { selectFlowMap, setFirstLoad } from '../../redux/slices/navigationSlice';
-import { selectIsVerified, selectPhone, unsetPhone, unverifyProfile } from '../../redux/slices/profileSlice';
+import { useContext } from 'react';
+import { useAppSelector } from '../../redux/hooks';
+import { selectFlowMap } from '../../redux/slices/navigationSlice';
 import imageLoader from '../../utils/imageLoader';
+import { UserContext } from '../../utils/providers/UserProvider';
 import styles from './Navigation.module.scss';
 
 export default function Navigation() {
     const router = useRouter();
-    const dispatch = useAppDispatch();
 
-    const phone = useAppSelector(selectPhone);
+    const { phone, setPhone, isVerified, setIsVerified } = useContext(UserContext)
     const flowMap = useAppSelector(selectFlowMap);
-    const isVerified = useAppSelector(selectIsVerified);
 
     const handleBackNavigation = () => {
-        console.log(router.pathname);
-        if (router.pathname === '/profile' && phone && !isVerified) {
-            dispatch(unsetPhone());
-            return;
-        }
-        if(router.pathname === "/addresses") {
-            dispatch(unsetPhone());
-            dispatch(unverifyProfile());
-        }
-        if (router.pathname === '/confirmation') dispatch(setFirstLoad('addresses'));
-        router.back();
+        setPhone(null)
+        setIsVerified(false)
+        router.back()
     }
 
     const handleClose = () => {
