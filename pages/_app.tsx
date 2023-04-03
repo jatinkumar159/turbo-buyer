@@ -13,6 +13,7 @@ import Head from 'next/head'
 import useRouteChange from '../utils/hooks/useRouteChange'
 import { mulish, theme } from '../utils/configurations/chakraTheme'
 import ShopifyConfigProvider from '../utils/providers/ShopifyConfigProvider'
+import UserProvider from '../utils/providers/UserProvider'
 
 const queryClient = new QueryClient()
 
@@ -31,21 +32,23 @@ export default function App({ Component, pageProps }: AppProps) {
         <ChakraProvider theme={theme}>
           <QueryClientProvider client={queryClient}>
             <ShopifyConfigProvider>
-              <Flex flexDir='row' className={mulish.className}>
-                <Flex className={styles.container} flexDir='column' grow={1}>
-                  <Navigation />
-                  {isRouteChanging ? (
-                    <Center h={`calc(100vh - 3rem)`}>
-                      <Spinner />
-                    </Center>
-                  ) : (
-                    <Component
-                      {...pageProps}
-                      className={styles.pageContainer}
-                    />
-                  )}
+              <UserProvider>
+                <Flex flexDir='row' className={mulish.className}>
+                  <Flex className={styles.container} flexDir='column' grow={1}>
+                    <Navigation />
+                    {isRouteChanging ? (
+                      <Center h={`calc(100vh - 3rem)`}>
+                        <Spinner />
+                      </Center>
+                    ) : (
+                      <Component
+                        {...pageProps}
+                        className={styles.pageContainer}
+                      />
+                    )}
+                  </Flex>
                 </Flex>
-              </Flex>
+              </UserProvider>
             </ShopifyConfigProvider>
           </QueryClientProvider>
         </ChakraProvider>

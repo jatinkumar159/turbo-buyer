@@ -1,29 +1,9 @@
 .container {
-    background: var(--turbo-colors-background);
-    padding: 1rem;
-    min-height: calc(100vh - 3rem);
+  background: var(--turbo-colors-background);
+  padding: 1rem;
+  min-height: calc(100vh - 3rem);
 }
 
 .brandLink {
-    color: var(--turbo-colors-link);
-}
-
-.changeNumber {
-    color: var(--turbo-colors-link);
-    font-size:10px;
-    font-weight:700;
-}
-
-.resendLink {
-    color: var(--turbo-colors-link);
-}
-
-.profileLeftAddress {
-    position: absolute;
-    border: 0 !important;
-}
-
-.profileNumber {
-    border-top-left-radius: 6px !important;
-    border-bottom-left-radius: 6px !important;
+  color: var(--turbo-colors-link);
 }
