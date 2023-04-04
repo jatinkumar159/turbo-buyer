@@ -20,6 +20,10 @@ export default function AddressList() {
         router.push("/profile");
     }
 
+    const handleRouteToParent = () => {
+        window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify({})}, '*');
+    }
+
     const formik = useFormik({
         initialValues: {
             selectedAddress: ''
@@ -84,6 +88,11 @@ export default function AddressList() {
                 </Box>
 
                 <Box py={2} px={4} className={styles.pageFooter}>
+                    {/* <Link"> */}
+                        <Button onClick={handleRouteToParent} fontSize={`sm`} variant={`outline`} type="submit" w={`100%`} colorScheme={`black`} textTransform={`uppercase`}>
+                            Add new Address
+                        </Button>
+                    {/* </Link> */}
                     <PageFooter />
                 </Box>
             </Flex>

@@ -19,6 +19,7 @@ export async function fetchAddresses(phone: string): Promise<void> {
 }
 
 export async function fetchAddressWithOtp(otp: string, otp_request_id: string, mobile: string): Promise<Response> {
+    // debugger;
     const res = await gateway(`${baseUrl}/v1/addresses?otp=${otp}&otp_request_id=${otp_request_id}&mobile=${mobile}`, 'GET');
     return res;
 }
