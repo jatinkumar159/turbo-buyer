@@ -60,16 +60,16 @@ export default function EnterPhone() {
           //   return
           // }
 
+          if (phone && phone === values.phone) {
+            router.push('/addresses')
+            return
+          }
+
           const res = await sendOTP(values.phone)
           const data = await res.json()
 
           if (!res.ok) {
             showErrorToast(toast, data)
-            return
-          }
-
-          if (phone === values.phone) {
-            router.push('/addresses')
             return
           }
 
