@@ -23,7 +23,8 @@ export function getHeaders(method: string, headersMap: any): Headers {
     if(method === 'POST') {
         headers.append('x-api-key', 'ugaoo_with_otp-m6mmd4md8xjs3jo5oah5');
     } else {
-        headers.append('X-API-KEY', 'uc_sales-wXDbwosW6tsi2SuLM3AI');
+        //uc_sales-wXDbwosW6tsi2SuLM3AI
+        headers.append('X-API-KEY', 'ugaoo_with_otp-m6mmd4md8xjs3jo5oah5');
     }
     return headers;
 }

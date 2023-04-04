@@ -1,8 +1,8 @@
 import { NewAddress } from "../utils/interfaces";
 import gateway from './gateway';
 
-// const baseUrl = 'http://localhost:8080'; //'https://unifill.unicommerce.co.in'
-const baseUrl = "/apps/unifill";
+const baseUrl = 'https://unifill.unicommerce.co.in'; //'http://localhost:8080'; //
+// const baseUrl = "/apps/unifill";
 
 /********************************************** BUYER ***********************************************************/
 export async function verifyBuyer(phone: string): Promise<Response> {
@@ -11,7 +11,7 @@ export async function verifyBuyer(phone: string): Promise<Response> {
 }
 
 export async function sendOTP(phone: string): Promise<Response> {
-    const res = await gateway(`${baseUrl}/auth/v1/otp?mobile=${phone}`, `POST`, {});
+    const res = await gateway(`${baseUrl}/vas/auth/v1/otp?mobile=${phone}`, `POST`, {});
     return res;
 }
 
@@ -21,7 +21,8 @@ export async function resendOTP(otpRequestId: string): Promise<Response> {
 }
 
 export async function verifyOTP(otpRequestId: string, otp?: string): Promise<Response> {
-    const res = await gateway(`${baseUrl}/auth/v1/otp/verify`, `POST`, JSON.stringify({
+    // debugger;
+    const res = await gateway(`${baseUrl}/vas/auth/v1/otp/verify`, `POST`, JSON.stringify({
             'otp_request_id': otpRequestId,
             'otp': otp,
         }),

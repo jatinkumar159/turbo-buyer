@@ -89,6 +89,8 @@ export default function Profile() {
                             return;
                         }
 
+                        // debugger;
+
                         // IF TOKEN ALREADY EXISTS && NUMBER IS SAME
                         const token = localStorage.getItem('turbo');
                         if (token) {
@@ -230,19 +232,19 @@ export default function Profile() {
                     const otp = inputs.reduce((acc, curr) => acc + values[curr] ?? '', '');
                     try {
                         const res = await fetchAddressWithOtp(otp, otpRequestId, phone);
-                        const data = await res.json();
+                        const data = await res;
 
-                        if(!res.ok) {
-                            showErrorToast(toast, data.api_error);
-                            setIsOtpInvalid(true);
-                            return;
-                        }
+                        // if(!res.ok) {
+                        //     showErrorToast(toast, data.api_error);
+                        //     setIsOtpInvalid(true);
+                        //     return;
+                        // }
 
-                        if(data.token) {
-                            localStorage.setItem('turbo', data.token);
-                        }
+                        // if(data.token) {
+                            // localStorage.setItem('turbo', data.token);
+                        // }
 
-                        if (data.address_list) {
+                        if (data['address_list']) {
                             setIsOtpInvalid(false);
                             dispatch(verifyProfile());
                             dispatch(setAddressList(data));
