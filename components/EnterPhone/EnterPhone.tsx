@@ -97,43 +97,47 @@ export default function EnterPhone() {
         submitForm,
       }) => (
         <Flex flexDir={`column`} justifyContent={`space-between`} h={`100%`}>
-          <Box w={`100%`}>
-            <Form>
-              <FormControl
-                isInvalid={touched.phone && errors.phone?.length ? true : false}
-                isDisabled={isSubmitting}
-              >
-                <Text as='h2' mb={4} textAlign={`center`} fontSize={`20px`}>
-                  Please enter your mobile number
-                </Text>
-                <InputGroup>
-                  <InputLeftAddon
-                    p={2}
-                    background={`none`}
-                    className={styles.profileLeftAddress}
-                  >
-                    +91
-                  </InputLeftAddon>
-                  <Input
-                    className={styles.profileNumber}
-                    ps={12}
-                    id='phone'
-                    type='number'
-                    placeholder='Phone Number'
-                    errorBorderColor='var(--turbo-colors-red)'
-                    autoFocus
-                    ref={inputRef}
-                    value={values.phone}
-                    onBlur={handleBlur}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      handleOnChange(e, handleChange, submitForm)
-                    }
-                  />
-                </InputGroup>
-                <FormErrorMessage justifyContent={`center`}>
-                  {errors.phone}
-                </FormErrorMessage>
-              </FormControl>
+          <Box w={`100%`} h={'100%'}>
+            <Form className={styles.temp}>
+              <Box>
+                <FormControl
+                  isInvalid={
+                    touched.phone && errors.phone?.length ? true : false
+                  }
+                  isDisabled={isSubmitting}
+                >
+                  <Text as='h2' mb={4} textAlign={`center`} fontSize={`20px`}>
+                    Please enter your mobile number
+                  </Text>
+                  <InputGroup>
+                    <InputLeftAddon
+                      p={2}
+                      background={`none`}
+                      className={styles.profileLeftAddress}
+                    >
+                      +91
+                    </InputLeftAddon>
+                    <Input
+                      className={styles.profileNumber}
+                      ps={12}
+                      id='phone'
+                      type='number'
+                      placeholder='Phone Number'
+                      errorBorderColor='var(--turbo-colors-red)'
+                      autoFocus
+                      ref={inputRef}
+                      value={values.phone}
+                      onBlur={handleBlur}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleOnChange(e, handleChange, submitForm)
+                      }
+                    />
+                  </InputGroup>
+                  <FormErrorMessage justifyContent={`center`}>
+                    {errors.phone}
+                  </FormErrorMessage>
+                </FormControl>
+              </Box>
               <Box mt={8}>
                 <Text fontSize={`sm`} textAlign={`center`}>
                   By continuing, I agree to the{' '}
@@ -148,23 +152,22 @@ export default function EnterPhone() {
                     Privacy Policy
                   </Link>
                 </Text>
-              </Box>
-
-              <Box>
-                <Button
-                  type='submit'
-                  isDisabled={String(values.phone).length !== 10}
-                  w={`100%`}
-                  bg={`black`}
-                  color={`white`}
-                  _hover={{ background: `black` }}
-                  mb={2}
-                >
-                  <Text as='span' fontSize='sm' textTransform={`uppercase`}>
-                    Continue <ChevronRightIcon ms={2} fontSize={`lg`} />
-                  </Text>
-                </Button>
-                <PageFooter />
+                <Box>
+                  <Button
+                    type='submit'
+                    isDisabled={String(values.phone).length !== 10}
+                    w={`100%`}
+                    bg={`black`}
+                    color={`white`}
+                    _hover={{ background: `black` }}
+                    mb={2}
+                  >
+                    <Text as='span' fontSize='sm' textTransform={`uppercase`}>
+                      Continue <ChevronRightIcon ms={2} fontSize={`lg`} />
+                    </Text>
+                  </Button>
+                  <PageFooter />
+                </Box>
               </Box>
             </Form>
           </Box>
