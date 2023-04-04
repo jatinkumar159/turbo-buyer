@@ -9,5 +9,6 @@ export async function updateCart(cartId: string, type: string, data: any): Promi
             data
         })
     )
+
     return res;
 }
