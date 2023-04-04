@@ -20,10 +20,12 @@ export default function useShopifyConfig() {
 
       console.log('Shopify Config >> ', message.data)
 
-      setConfig({
-        clientLogo: message.data.clientLogo,
-        requireOtp: message.data.requireOtp,
-      })
+      if (message.data?.hasOwnProperty('requireOtp')) {
+        setConfig({
+          clientLogo: message.data.brandLogoUrl,
+          requireOtp: message.data.requireOtp,
+        })
+      }
     }
 
     window.addEventListener('message', handler)
