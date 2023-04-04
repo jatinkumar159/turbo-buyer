@@ -150,7 +150,7 @@ export default function EnterPhone() {
                 </Text>
               </Box>
 
-              <Box>
+              <Box className={styles.footerBox}>
                 <Button
                   type='submit'
                   isDisabled={String(values.phone).length !== 10}

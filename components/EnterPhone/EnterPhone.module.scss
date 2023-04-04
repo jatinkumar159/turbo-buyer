@@ -12,3 +12,12 @@
   color: var(--turbo-colors-link);
   text-decoration: underline;
 }
+
+.footerBox {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  max-width: 375px;
+}
