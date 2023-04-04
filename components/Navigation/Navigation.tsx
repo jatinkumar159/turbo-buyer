@@ -13,13 +13,11 @@ import styles from './Navigation.module.scss';
 export default function Navigation() {
     const router = useRouter();
 
-    const { phone, setPhone, isVerified, setIsVerified } = useContext(UserContext)
+    const { phone, isVerified} = useContext(UserContext)
     const { clientLogo } = useContext(ShopifyConfigContext)
     const flowMap = useAppSelector(selectFlowMap);
 
     const handleBackNavigation = () => {
-        setIsVerified(false)
-        localStorage?.removeItem('addresses')
         if(router.pathname === '/addresses') {
             router.replace('/profile')
             return

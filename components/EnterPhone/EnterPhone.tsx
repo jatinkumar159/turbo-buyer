@@ -32,7 +32,7 @@ export default function EnterPhone() {
     handleChange(e)
   }
 
-  const { phone, setPhone } = useContext(UserContext)
+  const { phone, isVerified, setPhone } = useContext(UserContext)
   const inputRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
 
@@ -68,7 +68,14 @@ export default function EnterPhone() {
             return
           }
 
+          if (phone === values.phone) {
+            router.push('/addresses')
+            return
+          }
+
           setPhone(values.phone)
+          localStorage?.removeItem('addresses')
+          localStorage?.removeItem('phone')
           router.push(
             {
               pathname: '/verify',
