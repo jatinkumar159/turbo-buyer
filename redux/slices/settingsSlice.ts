@@ -6,6 +6,7 @@ export interface SettingsState {
     otpLength: number;
     cartPayload: any;
     cart: any;
+    brandLogoUrl: string;
 }
 
 const initialState: SettingsState = {
@@ -175,6 +176,7 @@ const initialState: SettingsState = {
         "cart_level_discount_applications": []
     },
     cart: undefined,
+    brandLogoUrl: ''
 }
 
 export const settingsSlice = createSlice({
@@ -183,6 +185,9 @@ export const settingsSlice = createSlice({
     reducers: {
         setIsOtpRequired: (state, action: PayloadAction<boolean>) => {
             state.isOtpRequired = action.payload;
+        },
+        setBrandLogoUrl: (state, action: PayloadAction<string>) => {
+            state.brandLogoUrl = action.payload;
         },
         setOtpLength: (state, action: PayloadAction<number>) => {
             state.otpLength = action.payload;
@@ -196,11 +201,11 @@ export const settingsSlice = createSlice({
     }
 });
 
-export const {setIsOtpRequired, setOtpLength, setCartPayload, setCart} = settingsSlice.actions;
+export const {setIsOtpRequired, setOtpLength, setCartPayload, setCart, setBrandLogoUrl} = settingsSlice.actions;
 
 export const selectIsOtpRequired = (state: AppState) => state.settings.isOtpRequired;
 export const selectOtpLength = (state: AppState) => state.settings.otpLength;
 export const selectCartPayload = (state: AppState) => state.settings.cartPayload;
 export const selectCart = (state: AppState) => state.settings.cart;
-
+export const selectBrandLogoUrl = (state: AppState) => state.settings.brandLogoUrl;
 export default settingsSlice.reducer;

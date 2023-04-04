@@ -16,7 +16,7 @@ export default function Success() {
                 <Button w={`100%`} bg={`black`} color={`white`} _hover={{ background: `black` }} mb={2} >
                     <Text as="span" fontSize="sm" textTransform={`uppercase`}>Continue Shopping <ChevronRightIcon ms={2} fontSize={`lg`} /></Text>
                 </Button>
-                <Text mt={2} fontSize={`sm`} textAlign={`center`}>Powered by <Link href={`https://unicommerce.com`}><Text as="span" color={`blue.300`}>TURBO</Text></Link></Text>
+                <Text mt={2} fontSize={`sm`} textAlign={`center`}>Powered by <Link href={`https://unicommerce.com`} rel="noreferrer" target="_blank"><Text as="span" color={`blue.300`}>TURBO</Text></Link></Text>
             </Box>
         </Flex>
     )
