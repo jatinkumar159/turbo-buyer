@@ -20,6 +20,7 @@ export default function Navigation() {
     const handleBackNavigation = () => {
         setPhone(null)
         setIsVerified(false)
+        localStorage?.removeItem('addresses')
         router.back()
     }
 

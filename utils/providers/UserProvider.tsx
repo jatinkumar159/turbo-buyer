@@ -7,7 +7,7 @@ export type User = {
   isVerified: boolean
   setIsVerified: (isVerified: boolean) => void
   addresses: any[]
-  setAddresses:  (addresses: any[]) => void
+  setAddresses: (addresses: any[]) => void
 }
 
 export const INIT_USER: User = {
@@ -16,7 +16,7 @@ export const INIT_USER: User = {
   isVerified: false,
   setIsVerified: () => {},
   addresses: [],
-  setAddresses: () => {}
+  setAddresses: () => {},
 }
 
 export const UserContext = React.createContext<User>(INIT_USER)
@@ -26,26 +26,6 @@ export default function UserProvider({ children }: { children: ReactNode }) {
   const [isVerified, setIsVerified] = useState<boolean>(INIT_USER.isVerified)
   const [addresses, setAddresses] = useState<any[]>(INIT_USER.addresses)
 
-  useEffect(() => {
-    // TODO: API STUFF HERE
-    const handler = (message: MessageEvent) => {
-      if (
-        !message.data ||
-        !message.data.type ||
-        message.data.type.indexOf('TURBO_CALL') === -1
-      )
-        return
-
-      console.log('Shopify CALL >> ', message.data)
-
-      setAddresses(message.data.addresses)
-    }
-
-    window.addEventListener('message', handler)
-
-    return () => window.removeEventListener('message', handler)
-  })
-
   return (
     <UserContext.Provider
       value={{
@@ -54,7 +34,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
         isVerified,
         setIsVerified,
         addresses,
-        setAddresses
+        setAddresses,
       }}
     >
       {children}
