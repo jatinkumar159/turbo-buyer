@@ -72,7 +72,7 @@ export default function AddressList() {
                 <Box flexGrow={1}>
                     <Box>
                         <form>
-                            <RadioGroup>
+                            <RadioGroup value={formik.values.selectedAddress}>
                                 {addresses.length ? addresses.map((address, index) => {
                                     return (
                                         <Box mb={2} key={index} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
