@@ -7,11 +7,11 @@ export default function useAuthCookies(router: NextRouter) {
 
   useEffect(() => {
     // const cookies = document.cookie.split(';')
-    const phone = localStorage.get("phone");
+    const phone = localStorage?.getItem("phone");
       // ?.find((cookie) => cookie?.trim()?.startsWith('phone='))
       // ?.split('=')[1]
     const addresses = JSON.parse(
-      decodeURIComponent(localStorage.getItem('addresses') ?? '[]')
+      decodeURIComponent(localStorage?.getItem('addresses') ?? '[]')
     )
 
     if (phone) {
