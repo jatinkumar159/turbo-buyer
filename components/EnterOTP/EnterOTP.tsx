@@ -35,7 +35,8 @@ type Props = {
 export default function EnterOTP({ otpRequestId, setOtpRequestId }: Props) {
   const OTP_DIGITS = 6
 
-  const { phone, setPhone, setIsVerified, setAddresses } = useContext(UserContext)
+  const { phone, setPhone, setIsVerified, setAddresses } =
+    useContext(UserContext)
   const { timer, setTimer } = useOTPTimer()
   const [isOtpInvalid, setIsOtpInvalid] = useState<boolean | undefined>(
     undefined
@@ -103,6 +104,11 @@ export default function EnterOTP({ otpRequestId, setOtpRequestId }: Props) {
             setIsOtpInvalid(false)
             setIsVerified(true)
             setAddresses(data.address_list)
+            localStorage?.setItem(
+              'addresses',
+              encodeURIComponent(JSON.stringify(data.address_list))
+            )
+            document.cookie = `phone=${phone}; path=/;`
             router.push('/addresses')
           } else {
             setIsOtpInvalid(true)
