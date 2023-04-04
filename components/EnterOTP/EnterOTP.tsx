@@ -108,7 +108,7 @@ export default function EnterOTP({ otpRequestId, setOtpRequestId }: Props) {
               'addresses',
               encodeURIComponent(JSON.stringify(data.address_list))
             )
-            document.cookie = `phone=${phone}; path=/;`
+            localStorage?.setItem("phone", phone ?? '');
             router.push('/addresses')
           } else {
             setIsOtpInvalid(true)
