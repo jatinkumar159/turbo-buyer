@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { Center } from '@chakra-ui/react'
+import { Center, Text } from '@chakra-ui/react'
 import styles from './profile.module.scss'
 import { ShopifyConfigContext } from '../../utils/providers/ShopifyConfigProvider'
 import EnterPhone from '../../components/EnterPhone/EnterPhone'
@@ -14,6 +14,7 @@ export default function Profile() {
 
   if (!requireOtp)
     return (
+
       <Center className={styles.container}>
         <EnterPhone setOtpRequestId={setOtpRequestId} />
       </Center>

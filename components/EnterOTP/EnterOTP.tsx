@@ -19,8 +19,7 @@ import {
   SetStateAction,
 } from 'react'
 import { fetchAddressWithOtp } from '../../apis/get'
-import { resendOTP, sendOTP } from '../../apis/post'
-import { setAddressList } from '../../redux/slices/addressSlice'
+import { sendOTP } from '../../apis/post'
 import { showErrorToast } from '../../utils/toasts'
 import * as Yup from 'yup'
 import useOTPTimer from '../../utils/hooks/useOTPTimer'
@@ -36,7 +35,7 @@ type Props = {
 export default function EnterOTP({ otpRequestId, setOtpRequestId }: Props) {
   const OTP_DIGITS = 6
 
-  const { phone, setPhone, setIsVerified } = useContext(UserContext)
+  const { phone, setPhone, setIsVerified, setAddresses } = useContext(UserContext)
   const { timer, setTimer } = useOTPTimer()
   const [isOtpInvalid, setIsOtpInvalid] = useState<boolean | undefined>(
     undefined
@@ -103,6 +102,7 @@ export default function EnterOTP({ otpRequestId, setOtpRequestId }: Props) {
           if (data.address_list) {
             setIsOtpInvalid(false)
             setIsVerified(true)
+            setAddresses(data.address_list)
             router.push('/addresses')
           } else {
             setIsOtpInvalid(true)

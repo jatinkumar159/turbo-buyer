@@ -64,12 +64,12 @@ export default function EnterPhone({ setOtpRequestId }: Props) {
       validateOnBlur={false}
       onSubmit={async (values) => {
         try {
-          if (!requireOtp) {
-            fetchAddresses(values.phone)
-            setPhone(values.phone)
-            router.push('/addresses')
-            return
-          }
+          // if (!requireOtp) {
+          //   fetchAddresses(values.phone)
+          //   setPhone(values.phone)
+          //   router.push('/addresses')
+          //   return
+          // }
 
           const res = await sendOTP(values.phone)
           const data = await res.json()

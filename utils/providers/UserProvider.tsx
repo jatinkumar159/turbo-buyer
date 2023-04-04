@@ -7,6 +7,7 @@ export type User = {
   isVerified: boolean
   setIsVerified: (isVerified: boolean) => void
   addresses: any[]
+  setAddresses:  (addresses: any[]) => void
 }
 
 export const INIT_USER: User = {
@@ -15,6 +16,7 @@ export const INIT_USER: User = {
   isVerified: false,
   setIsVerified: () => {},
   addresses: [],
+  setAddresses: () => {}
 }
 
 export const UserContext = React.createContext<User>(INIT_USER)
@@ -52,6 +54,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
         isVerified,
         setIsVerified,
         addresses,
+        setAddresses
       }}
     >
       {children}

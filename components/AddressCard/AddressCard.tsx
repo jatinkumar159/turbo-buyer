@@ -3,6 +3,8 @@ import { Box, Flex, IconButton, Radio, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import styles from './AddressCard.module.scss';
 import { Address } from "./../../utils/interfaces";
+import { useContext } from 'react';
+import { UserContext } from '../../utils/providers/UserProvider';
 
 interface Props {
     address: Address | undefined | null;
@@ -13,6 +15,7 @@ interface Props {
 }
 
 export default function AddressCard({ address, mobile, selected, isInForm, index }: Props) {
+    const { phone } = useContext(UserContext); 
     const router = useRouter();
     if (!address) return <></>;
 
@@ -51,7 +54,7 @@ export default function AddressCard({ address, mobile, selected, isInForm, index
                     }
                     <Box mt={2}>
                         <Text mb={2} fontSize={`sm`}>{`${address.address_line1 + ', ' + (address.address_line2 ? address.address_line2 + ', ' : '') + address.city + ', ' + (address.district ? address.district + ', ' : '') + address.state + ' - ' + address.pin_code}`}</Text>
-                        <Text fontSize={`xs`}>Mobile: {`${mobile}`}</Text>
+                        <Text fontSize={`xs`}>Mobile: {`${phone}`}</Text>
                     </Box>
                 </Flex>
             </Flex>

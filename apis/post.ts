@@ -1,8 +1,8 @@
 import { NewAddress } from "../utils/interfaces";
 import gateway from './gateway';
 
-// const baseUrl = 'http://localhost:8080'; //'https://unifill.unicommerce.co.in'
-const baseUrl = "/apps/unifill";
+const baseUrl = 'https://unifill.unicommerce.co.in/vas'; // 'http://localhost:8080';
+// const baseUrl = "/apps/unifill";
 
 /********************************************** BUYER ***********************************************************/
 export async function verifyBuyer(phone: string): Promise<Response> {

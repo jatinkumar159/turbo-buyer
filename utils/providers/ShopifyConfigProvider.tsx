@@ -8,7 +8,7 @@ export type ShopifyConfig = {
 }
 
 export const INIT_SHOPIFY_CONFIG: ShopifyConfig = {
-  requireOtp: null,
+  requireOtp: true,
   clientLogo: null,
 }
 

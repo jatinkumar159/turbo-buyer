@@ -82,6 +82,7 @@ export default function AddressList() {
                         </form>
                     </Box>
                 </Box>
+
                 <Box py={2} px={4} className={styles.pageFooter}>
                     <PageFooter />
                 </Box>
@@ -106,7 +107,7 @@ export default function AddressList() {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button variant='ghost' size="sm" mr={4} onClick={onClose}>Cancel</Button>
+                        <Button variant='ghost' size="sm" mr={4} onClick={() => {onClose(); formik.setFieldValue('selectedAddress', '')}}>Cancel</Button>
                         <Button colorScheme='blue' onClick={() => {
                             onClose();
                             window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify(addresses[+formik.values.selectedAddress])}, '*');
