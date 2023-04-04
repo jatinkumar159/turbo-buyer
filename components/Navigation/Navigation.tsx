@@ -18,9 +18,12 @@ export default function Navigation() {
     const flowMap = useAppSelector(selectFlowMap);
 
     const handleBackNavigation = () => {
-        setPhone(null)
         setIsVerified(false)
         localStorage?.removeItem('addresses')
+        if(router.pathname === '/addresses') {
+            router.replace('/profile')
+            return
+        }
         router.back()
     }
 

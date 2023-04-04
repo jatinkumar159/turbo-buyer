@@ -5,7 +5,6 @@ import AddressCard from "../../components/AddressCard/AddressCard";
 import { useRouter } from "next/router";
 import { useContext, useEffect} from "react";
 import { useFormik } from "formik";
-import { FaChevronRight} from 'react-icons/fa';
 import PageFooter from "../../components/PageFooter/PageFooter";
 import { UserContext } from "../../utils/providers/UserProvider";
 
@@ -13,12 +12,6 @@ export default function AddressList() {
     const router = useRouter();
     const { phone, setPhone, setIsVerified, addresses } = useContext(UserContext)
     const { isOpen, onClose, onOpen } = useDisclosure();
-
-    const handleChangeNumber = () => {
-        setPhone(null)
-        setIsVerified(false)
-        router.push("/profile");
-    }
 
     const handleRouteToParent = () => {
         window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify({})}, '*');
@@ -37,13 +30,10 @@ export default function AddressList() {
 
     if(!addresses || !addresses.length) return (
         <Flex className={styles.container} flexDir={`column`}>
-            <Box onClick={handleChangeNumber}>
+            <Box>
                 <Flex className={styles.section} ps={4} pe={4} pt={2} pb={2} align={`center`} mb={2}>
                     <Box className={`${styles.sectionContent}`} flexGrow={1}>
                         <Text fontWeight={`bold`}>Your number <Text as="span" ms={4} fontWeight={`bold`}>{phone}</Text></Text>
-                    </Box>
-                    <Box>
-                        <Text><FaChevronRight /></Text>
                     </Box>
                 </Flex>
             </Box>
@@ -56,13 +46,10 @@ export default function AddressList() {
     return (
         <>
             <Flex className={styles.container} flexDir={`column`}>
-                <Box onClick={handleChangeNumber}>
+                <Box>
                     <Flex className={styles.section} ps={4} pe={4} pt={2} pb={2} align={`center`} mb={2}>
                         <Box className={`${styles.sectionContent}`} flexGrow={1}>
                             <Text fontWeight={`bold`}>Your number <Text as="span" ms={4} fontWeight={`bold`}>{phone}</Text></Text>
-                        </Box>
-                        <Box>
-                            <Text><FaChevronRight /></Text>
                         </Box>
                     </Flex>
                 </Box>
