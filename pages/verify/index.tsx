@@ -24,13 +24,13 @@ import styles from './verify.module.scss'
 export default function EnterOTP() {
   const router = useRouter()
   const {
-    query: { id },
+    query: { id, phone },
   } = router
 
   const [otpRequestId, setOtpRequestId] = useState<string>(String(id) ?? '')
   const OTP_DIGITS = 6
 
-  const { phone, setAddresses } = useContext(UserContext)
+  const { setAddresses } = useContext(UserContext)
   const { timer, setTimer } = useOTPTimer()
   const [isOtpInvalid, setIsOtpInvalid] = useState<boolean | undefined>(
     undefined
@@ -58,7 +58,7 @@ export default function EnterOTP() {
 
   const handleResendOTP = async () => {
     try {
-      const res = await sendOTP(phone!)
+      const res = await sendOTP(phone ? String(phone) : '')
       const data = await res.json()
 
       if (res.status !== 200) {
@@ -86,7 +86,11 @@ export default function EnterOTP() {
           const otp = inputs.reduce((acc, curr) => acc + values[curr] ?? '', '')
           try {
             // NOTE: OTP VERIFICATION SHOULD BE A SEPARATE FLOW NOW??
-            const res = await fetchAddressWithOtp(otp, otpRequestId, phone!)
+            const res = await fetchAddressWithOtp(
+              otp,
+              otpRequestId,
+              phone ? String(phone) : ''
+            )
             const data = await res.json()
 
             if (!res.ok) {
@@ -102,7 +106,7 @@ export default function EnterOTP() {
                 'addresses',
                 encodeURIComponent(JSON.stringify(data.address_list))
               )
-              localStorage?.setItem('phone', phone ?? '')
+              localStorage?.setItem('verified', 'true')
               router.push('/addresses')
             } else {
               setIsOtpInvalid(true)

@@ -23,7 +23,7 @@ import styles from './EnterPhone.module.scss'
 import { UserContext } from '../../utils/providers/UserProvider'
 
 export default function EnterPhone() {
-  const { phone, setPhone } = useContext(UserContext)
+  const { phone, setPhone, setAddresses } = useContext(UserContext)
   const inputRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
 
@@ -52,7 +52,11 @@ export default function EnterPhone() {
           // }
 
           // User uses the same number previously verified
-          if (phone && phone === values.phone) {
+          if (
+            phone &&
+            phone === values.phone &&
+            localStorage?.getItem('verified') === 'true'
+          ) {
             router.push('/addresses')
             return
           }
@@ -67,13 +71,16 @@ export default function EnterPhone() {
 
           // User has used a new phone number, clear details of previous number
           setPhone(values.phone)
+          setAddresses([])
+          localStorage?.setItem('phone', values.phone)
           localStorage?.removeItem('addresses')
-          localStorage?.removeItem('phone')
+          localStorage?.removeItem('verified')
           router.push(
             {
               pathname: '/verify',
               query: {
                 id: data.otp_request_id,
+                phone: values.phone,
               },
             },
             'verify'

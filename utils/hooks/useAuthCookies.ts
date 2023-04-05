@@ -7,17 +7,20 @@ export default function useAuthCookies(router: NextRouter) {
 
   useEffect(() => {
     const phone = localStorage?.getItem('phone')
+    const isVerified = localStorage?.getItem('verified')
     const addresses = JSON.parse(
       decodeURIComponent(localStorage?.getItem('addresses') ?? '[]')
     )
 
-    if (phone) {
+    if (phone && isVerified === 'true') {
       setPhone(phone)
       setAddresses(addresses)
       router.push('/addresses')
       return
     }
 
+    setPhone(null)
+    setAddresses([])
     router.push('/profile')
   }, [])
 }
