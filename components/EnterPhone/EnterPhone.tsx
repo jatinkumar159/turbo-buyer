@@ -157,7 +157,7 @@ export default function EnterPhone() {
                     Privacy Policy
                   </Link>
                 </Text>
-                <Box>
+                <Box mt={2}>
                   <Button
                     type='submit'
                     isDisabled={String(values.phone).length !== 10}
@@ -169,6 +169,24 @@ export default function EnterPhone() {
                   >
                     <Text as='span' fontSize='sm' textTransform={`uppercase`}>
                       Continue <ChevronRightIcon ms={2} fontSize={`lg`} />
+                    </Text>
+                  </Button>
+
+                  <Button
+                    w={`100%`}
+                    bg={`black`}
+                    color={`white`}
+                    _hover={{ background: `black` }}
+                    mb={2}
+                    onClick={() => {
+                      window?.top!.postMessage(
+                        { type: 'TURBO_EXIT', data: 'close event' },
+                        '*'
+                      )
+                    }}
+                  >
+                    <Text as='span' fontSize='sm' textTransform={`uppercase`}>
+                      Skip <ChevronRightIcon ms={2} fontSize={`lg`} />
                     </Text>
                   </Button>
                   <PageFooter />
