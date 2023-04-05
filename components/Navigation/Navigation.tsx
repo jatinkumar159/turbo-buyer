@@ -7,13 +7,11 @@ import { useAppSelector } from '../../redux/hooks';
 import { selectFlowMap } from '../../redux/slices/navigationSlice';
 import imageLoader from '../../utils/imageLoader';
 import { ShopifyConfigContext } from '../../utils/providers/ShopifyConfigProvider';
-import { UserContext } from '../../utils/providers/UserProvider';
 import styles from './Navigation.module.scss';
 
 export default function Navigation() {
     const router = useRouter();
 
-    const { phone, isVerified} = useContext(UserContext)
     const { clientLogo } = useContext(ShopifyConfigContext)
     const flowMap = useAppSelector(selectFlowMap);
 
@@ -32,7 +30,7 @@ export default function Navigation() {
     return (
         <div className={styles.container}>
             <div className={styles.brand}>
-                {((router.pathname === '/profile' && !(phone && !isVerified)) || (router.pathname === '/success')) ?
+                {((router.pathname === '/profile') || (router.pathname === '/success')) ?
                     <IconButton aria-label="close" icon={<SmallCloseIcon />} background={"transparent"} _hover={{ bg: 'transparent' }} onClick={handleClose} />
                     : <IconButton aria-label="back" icon={<ArrowBackIcon />} background={"transparent"} _hover={{ bg: 'transparent' }} onClick={handleBackNavigation} />
                 }

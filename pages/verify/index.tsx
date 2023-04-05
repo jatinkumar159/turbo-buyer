@@ -30,8 +30,7 @@ export default function EnterOTP() {
   const [otpRequestId, setOtpRequestId] = useState<string>(String(id) ?? '')
   const OTP_DIGITS = 6
 
-  const { phone, setPhone, setIsVerified, setAddresses } =
-    useContext(UserContext)
+  const { phone, setAddresses } = useContext(UserContext)
   const { timer, setTimer } = useOTPTimer()
   const [isOtpInvalid, setIsOtpInvalid] = useState<boolean | undefined>(
     undefined
@@ -98,7 +97,6 @@ export default function EnterOTP() {
 
             if (data.address_list) {
               setIsOtpInvalid(false)
-              setIsVerified(true)
               setAddresses(data.address_list)
               localStorage?.setItem(
                 'addresses',

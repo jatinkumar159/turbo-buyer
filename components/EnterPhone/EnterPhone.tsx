@@ -14,25 +14,16 @@ import {
 import { Formik, Form } from 'formik'
 import Link from 'next/link'
 import router from 'next/router'
-import { ChangeEvent, useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { sendOTP } from '../../apis/post'
 import { showErrorToast } from '../../utils/toasts'
 import PageFooter from '../PageFooter/PageFooter'
 import * as Yup from 'yup'
 import styles from './EnterPhone.module.scss'
-import { ShopifyConfigContext } from '../../utils/providers/ShopifyConfigProvider'
 import { UserContext } from '../../utils/providers/UserProvider'
 
 export default function EnterPhone() {
-  const handleOnChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    handleChange: Function,
-    submitForm: Function
-  ) => {
-    handleChange(e)
-  }
-
-  const { phone, isVerified, setPhone } = useContext(UserContext)
+  const { phone, setPhone } = useContext(UserContext)
   const inputRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
 
@@ -60,6 +51,7 @@ export default function EnterPhone() {
           //   return
           // }
 
+          // User uses the same number previously verified
           if (phone && phone === values.phone) {
             router.push('/addresses')
             return
@@ -73,6 +65,7 @@ export default function EnterPhone() {
             return
           }
 
+          // User has used a new phone number, clear details of previous number
           setPhone(values.phone)
           localStorage?.removeItem('addresses')
           localStorage?.removeItem('phone')
@@ -135,9 +128,7 @@ export default function EnterPhone() {
                       ref={inputRef}
                       value={values.phone}
                       onBlur={handleBlur}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        handleOnChange(e, handleChange, submitForm)
-                      }
+                      onChange={handleChange}
                     />
                   </InputGroup>
                   <FormErrorMessage justifyContent={`center`}>

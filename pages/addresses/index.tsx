@@ -9,8 +9,7 @@ import PageFooter from "../../components/PageFooter/PageFooter";
 import { UserContext } from "../../utils/providers/UserProvider";
 
 export default function AddressList() {
-    const router = useRouter();
-    const { phone, setPhone, setIsVerified, addresses } = useContext(UserContext)
+    const { phone, addresses } = useContext(UserContext)
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     const handleRouteToParent = () => {
