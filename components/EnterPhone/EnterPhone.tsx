@@ -39,7 +39,8 @@ export default function EnterPhone() {
       validationSchema={Yup.object({
         phone: Yup.string()
           .length(10, 'Please enter a valid 10 digit mobile number.')
-          .required('Required'),
+          .required('Required')
+          .matches(new RegExp('^[6-9]\\d{9}$'), 'Invalid Mobile Number'),
       })}
       validateOnBlur={false}
       onSubmit={async (values) => {
