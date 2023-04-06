@@ -12,8 +12,19 @@ export type ShopifyConfig = {
 export const INIT_SHOPIFY_CONFIG: ShopifyConfig = {
   requireOtp: true,
   clientLogo: null,
-  phone: null,
-  addresses: [],
+  phone: '8171505570',
+  addresses: [
+    {
+      name: 'Raghav Kanwal',
+      address_line1: '709 Shahbad, Near Koharapeer',
+      address_line2: '',
+      city: 'Bareilly',
+      district: '',
+      state: 'Uttar Pradesh',
+      country: 'IN',
+      pin_code: '243001',
+    },
+  ],
 }
 
 export const ShopifyConfigContext =

@@ -31,6 +31,40 @@ export default function AddressList() {
         if (formik.values.selectedAddress) onOpen()
     }, [formik.values.selectedAddress])
 
+    const ConfirmationModal = () => {
+        return (
+            <Modal isCentered={true} isOpen={isOpen} onClose={onClose} motionPreset="none">
+                <ModalOverlay/>
+                <ModalContent>
+                    <ModalHeader>Are you sure?</ModalHeader>
+                    <ModalCloseButton mt={1}/>
+                    <ModalBody >
+                    <Flex flexDir="row" w="100%" align="flex-start">
+                        <Box flexGrow={1}>
+                            <Text>Deliver to the following address:</Text>
+                            <Text as="p" fontWeight="bold">{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.name.trim()},</Text>
+                            <Text fontSize="sm">{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.address_line1}</Text>
+                            <Text fontSize="sm" >{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.address_line2}</Text>
+                            <Text fontSize="sm">{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.pin_code || ''}</Text>
+                            {(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.mobile ? <Text mt={2} fontSize="xs">Mobile: +91 {(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.mobile}</Text> : null}
+                        </Box>
+                    </Flex>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button variant='ghost' size="sm" mr={4} onClick={() => {onClose(); formik.setFieldValue('selectedAddress', '')}}>Cancel</Button>
+                        <Button colorScheme='blue' onClick={() => {
+                            onClose();
+                            window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify((addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress]))}, '*');
+                        }} size="sm">
+                            Proceed
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        )
+    }
+
     if(!addresses || !addresses.length) return (
         <Flex className={styles.container} flexDir={`column`} h={'calc(100dvh - 3rem'} justifyContent={'space-between'}>
             <Box>
@@ -39,16 +73,46 @@ export default function AddressList() {
                         <Text fontWeight={`bold`}>Your number <Text as="span" ms={4} fontWeight={`bold`}>{phone}</Text></Text>
                     </Box>
                 </Flex>
+            </Box>  
+
+            { shopifyAddresses?.length ? <Flex className={styles.pageTitle} mb={2} ps={4} pe={4}>
+                    <Text fontWeight={`bold`}>Deliver to</Text>
+            </Flex> : <></>}
+
+            <Box flexGrow={1}>
+                <Box>
+                    <form>
+                        <RadioGroup value={formik.values.selectedAddress}>
+                            {shopifyAddresses?.length ? shopifyAddresses?.map((address, index) => {
+                                return (
+                                    <Box mb={2} key={index} p={4} className={`${styles.card} ${(address.address_id === formik.values.selectedAddress) ? styles.selectedCard : ''}`}>
+                                        <Radio colorScheme='green' {...formik.getFieldProps('selectedAddress')} value={index.toString()} className={`${styles.radio}`}>
+                                            <AddressCard key={index} index={index} isInForm={true} address={address} mobile={address.mobile} selected={index === +formik.values.selectedAddress} />
+                                        </Radio>
+                                    </Box>
+                                );
+                            }) : null}
+                        </RadioGroup>
+                    </form>
+                </Box>
             </Box>
-            <Center>
+
+            {(!shopifyAddresses || !shopifyAddresses.length) ? <Center>
                 <Text>No Addresses Found!</Text>
-            </Center>
+            </Center> : <></>}
 
             <Box className={styles.pageFooter}>
                 { addresses === null ? (
                     <Box py={1} px={4}>
                         <Button onClick={() => {
                             // Mock a call to fetch addresses
+
+                            if(true) {
+                                const a = [ { "name": "Utkarsh Saxena", "address_line1": "709 Shahbad, Near Koharapeer", "address_line2": "", "city": "Bareilly", "district": "", "state": "Uttar Pradesh", "country": "IN", "pin_code": "243001" } ]
+                                setAddresses(a)
+                                localStorage?.setItem('addresses', encodeURIComponent(JSON.stringify(a)))
+                                return
+                            }
                             
                             toast({
                                 title: `No Addresses found!`,
@@ -75,6 +139,8 @@ export default function AddressList() {
                     <PageFooter />
                 </Box>
             </Box>
+
+            <ConfirmationModal />
         </Flex>
     )
 
@@ -117,37 +183,9 @@ export default function AddressList() {
                     {/* </Link> */}
                     <PageFooter />
                 </Box>
+
+                <ConfirmationModal />
             </Flex>
-
-            <Modal isCentered={true} isOpen={isOpen} onClose={onClose} motionPreset="none">
-                <ModalOverlay/>
-                <ModalContent>
-                    <ModalHeader>Are you sure?</ModalHeader>
-                    <ModalCloseButton mt={1}/>
-                    <ModalBody >
-                    <Flex flexDir="row" w="100%" align="flex-start">
-                        <Box flexGrow={1}>
-                            <Text>Deliver to the following address:</Text>
-                            <Text as="p" fontWeight="bold">{addresses[+formik.values.selectedAddress]?.name.trim()},</Text>
-                            <Text fontSize="sm">{addresses[+formik.values.selectedAddress]?.address_line1}</Text>
-                            <Text fontSize="sm" >{addresses[+formik.values.selectedAddress]?.address_line2}</Text>
-                            <Text fontSize="sm">{addresses[+formik.values.selectedAddress]?.pin_code || ''}</Text>
-                            {addresses[+formik.values.selectedAddress]?.mobile ? <Text mt={2} fontSize="xs">Mobile: +91 {addresses[+formik.values.selectedAddress]?.mobile}</Text> : null}
-                        </Box>
-                    </Flex>
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <Button variant='ghost' size="sm" mr={4} onClick={() => {onClose(); formik.setFieldValue('selectedAddress', '')}}>Cancel</Button>
-                        <Button colorScheme='blue' onClick={() => {
-                            onClose();
-                            window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify(addresses[+formik.values.selectedAddress])}, '*');
-                        }} size="sm">
-                            Proceed
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
         </>
     )
 }
