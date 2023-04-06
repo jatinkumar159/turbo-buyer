@@ -16,10 +16,6 @@ export default function Navigation() {
     const flowMap = useAppSelector(selectFlowMap);
 
     const handleBackNavigation = () => {
-        if(router.pathname === '/addresses') {
-            router.replace('/profile')
-            return
-        }
         router.back()
     }
 
@@ -32,9 +28,13 @@ export default function Navigation() {
             <div className={styles.brand}>
                 {((router.pathname === '/profile') || (router.pathname === '/success')) ?
                     <IconButton aria-label="close" icon={<SmallCloseIcon />} background={"transparent"} _hover={{ bg: 'transparent' }} onClick={handleClose} />
-                    : <IconButton aria-label="back" icon={<ArrowBackIcon />} background={"transparent"} _hover={{ bg: 'transparent' }} onClick={handleBackNavigation} />
+                    : <></>
                 }
-                <Text as="span" fontSize="sm" fontWeight="bold">{flowMap[router.pathname]?.title}</Text>
+                { router.pathname === '/verify' ? 
+                    <IconButton aria-label="back" icon={<ArrowBackIcon />} background={"transparent"} _hover={{ bg: 'transparent' }} onClick={handleBackNavigation} />
+                    : <></>
+                }
+                <Text as="span" fontSize="sm" fontWeight="bold" px={2}>{flowMap[router.pathname]?.title}</Text>
             </div>
             <div className={styles.attribution}>
                 {clientLogo && <Image loader={imageLoader} src={clientLogo} alt="Logo" width='70' height='50' priority style={{height: 40, width: 'auto', objectFit: 'contain'}}/>}

@@ -8,11 +8,13 @@ import { useFormik } from "formik";
 import PageFooter from "../../components/PageFooter/PageFooter";
 import { UserContext } from "../../utils/providers/UserProvider";
 import { ShopifyConfigContext } from "../../utils/providers/ShopifyConfigProvider";
+import { FaChevronRight } from "react-icons/fa";
 
 export default function AddressList() {
     const { phone, addresses, setAddresses } = useContext(UserContext)
     const { addresses: shopifyAddresses } = useContext(ShopifyConfigContext)
     const toast = useToast()
+    const router = useRouter()
     
     const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -71,6 +73,12 @@ export default function AddressList() {
                 <Flex className={styles.section} ps={4} pe={4} pt={2} pb={2} align={`center`} mb={2}>
                     <Box className={`${styles.sectionContent}`} flexGrow={1}>
                         <Text fontWeight={`bold`}>Your number <Text as="span" ms={4} fontWeight={`bold`}>{phone}</Text></Text>
+                    </Box>
+                    <Box onClick={() => {
+                        router.replace('/profile')
+                        return
+                    }} cursor={'pointer'}>
+                        <Text><FaChevronRight /></Text>
                     </Box>
                 </Flex>
             </Box>  
