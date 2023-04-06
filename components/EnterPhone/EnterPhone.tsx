@@ -45,13 +45,6 @@ export default function EnterPhone() {
       validateOnBlur={false}
       onSubmit={async (values) => {
         try {
-          // if (!requireOtp) {
-          //   fetchAddresses(values.phone)
-          //   setPhone(values.phone)
-          //   router.push('/addresses')
-          //   return
-          // }
-
           // User uses the same number previously verified
           if (
             phone &&
@@ -169,15 +162,16 @@ export default function EnterPhone() {
                     mb={2}
                   >
                     <Text as='span' fontSize='sm' textTransform={`uppercase`}>
-                      Continue <ChevronRightIcon ms={2} fontSize={`lg`} />
+                      Fetch Addresses
+                      <ChevronRightIcon ms={2} fontSize={`lg`} />
                     </Text>
                   </Button>
 
                   <Button
                     w={`100%`}
-                    bg={`black`}
-                    color={`white`}
-                    _hover={{ background: `black` }}
+                    color={`black`}
+                    bgColor={'transparent'}
+                    border='1px solid black'
                     mb={2}
                     onClick={() => {
                       window?.top!.postMessage(
@@ -187,7 +181,8 @@ export default function EnterPhone() {
                     }}
                   >
                     <Text as='span' fontSize='sm' textTransform={`uppercase`}>
-                      Skip <ChevronRightIcon ms={2} fontSize={`lg`} />
+                      Add New Address
+                      <ChevronRightIcon ms={2} fontSize={`lg`} />
                     </Text>
                   </Button>
                   <PageFooter />
