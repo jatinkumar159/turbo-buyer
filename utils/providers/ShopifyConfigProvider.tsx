@@ -5,11 +5,15 @@ import useShopifyConfig from '../hooks/useShopifyConfig'
 export type ShopifyConfig = {
   requireOtp: boolean | null
   clientLogo: string | null
+  phone: string | null
+  addresses: any[]
 }
 
 export const INIT_SHOPIFY_CONFIG: ShopifyConfig = {
   requireOtp: true,
   clientLogo: null,
+  phone: null,
+  addresses: [],
 }
 
 export const ShopifyConfigContext =

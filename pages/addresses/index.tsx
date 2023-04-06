@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Button, Text, Radio, RadioGroup, Flex, useDisclosure, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
+import { Box, Button, Text, Radio, RadioGroup, Flex, useDisclosure, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center, useToast } from "@chakra-ui/react";
 import styles from './addresses.module.scss';
 import AddressCard from "../../components/AddressCard/AddressCard";
 import { useRouter } from "next/router";
@@ -7,9 +7,13 @@ import { useContext, useEffect} from "react";
 import { useFormik } from "formik";
 import PageFooter from "../../components/PageFooter/PageFooter";
 import { UserContext } from "../../utils/providers/UserProvider";
+import { ShopifyConfigContext } from "../../utils/providers/ShopifyConfigProvider";
 
 export default function AddressList() {
-    const { phone, addresses } = useContext(UserContext)
+    const { phone, addresses, setAddresses } = useContext(UserContext)
+    const { addresses: shopifyAddresses } = useContext(ShopifyConfigContext)
+    const toast = useToast()
+    
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     const handleRouteToParent = () => {
@@ -28,7 +32,7 @@ export default function AddressList() {
     }, [formik.values.selectedAddress])
 
     if(!addresses || !addresses.length) return (
-        <Flex className={styles.container} flexDir={`column`}>
+        <Flex className={styles.container} flexDir={`column`} h={'calc(100dvh - 3rem'} justifyContent={'space-between'}>
             <Box>
                 <Flex className={styles.section} ps={4} pe={4} pt={2} pb={2} align={`center`} mb={2}>
                     <Box className={`${styles.sectionContent}`} flexGrow={1}>
@@ -36,9 +40,41 @@ export default function AddressList() {
                     </Box>
                 </Flex>
             </Box>
-            <Center h={`calc(100dvh - 8rem)`}>
+            <Center>
                 <Text>No Addresses Found!</Text>
             </Center>
+
+            <Box className={styles.pageFooter}>
+                { addresses === null ? (
+                    <Box py={1} px={4}>
+                        <Button onClick={() => {
+                            // Mock a call to fetch addresses
+                            
+                            toast({
+                                title: `No Addresses found!`,
+                                status: 'warning',
+                                variant: 'left-accent',
+                                position: 'top-right',
+                                duration: 3000,
+                                isClosable: true,
+                            });
+                            setAddresses([])
+                            handleRouteToParent()
+                        }} fontSize={`sm`} variant={`outline`} type="submit" w={`100%`} colorScheme={`black`} textTransform={`uppercase`}>
+                            Fetch More Addresses
+                        </Button>
+                </Box>
+                ): <></>}
+
+                <Box py={1} px={4}>
+                {/* <Link"> */}
+                    <Button onClick={handleRouteToParent} fontSize={`sm`} variant={`outline`} type="submit" w={`100%`} colorScheme={`black`} textTransform={`uppercase`}>
+                        Add new Address
+                    </Button>
+                {/* </Link> */}
+                    <PageFooter />
+                </Box>
+            </Box>
         </Flex>
     )
 
