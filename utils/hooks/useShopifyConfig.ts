@@ -24,8 +24,8 @@ export default function useShopifyConfig() {
         setConfig({
           clientLogo: message.data.brandLogoUrl,
           requireOtp: message.data.requireOtp,
-          phone: message.data.phone,
-          addresses: message.data.addresses,
+          phone: INIT_SHOPIFY_CONFIG.phone,
+          addresses: INIT_SHOPIFY_CONFIG.addresses,
         })
       }
     }

@@ -19,7 +19,9 @@ export default function AddressList() {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     const handleRouteToParent = () => {
-        window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify({})}, '*');
+        window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify({
+            mobile: phone,
+        })}, '*');
     }
 
     const formik = useFormik({
@@ -41,23 +43,25 @@ export default function AddressList() {
                     <ModalHeader>Are you sure?</ModalHeader>
                     <ModalCloseButton mt={1}/>
                     <ModalBody >
+                    { (addresses?.length || shopifyAddresses?.length) ? 
                     <Flex flexDir="row" w="100%" align="flex-start">
-                        <Box flexGrow={1}>
-                            <Text>Deliver to the following address:</Text>
-                            <Text as="p" fontWeight="bold">{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.name.trim()},</Text>
-                            <Text fontSize="sm">{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.address_line1}</Text>
-                            <Text fontSize="sm" >{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.address_line2}</Text>
-                            <Text fontSize="sm">{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.pin_code || ''}</Text>
-                            {(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.mobile ? <Text mt={2} fontSize="xs">Mobile: +91 {(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.mobile}</Text> : null}
-                        </Box>
-                    </Flex>
+                    <Box flexGrow={1}>
+                        <Text>Deliver to the following address:</Text>
+                        <Text as="p" fontWeight="bold">{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.name.trim()},</Text>
+                        <Text fontSize="sm">{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.address_line1}</Text>
+                        <Text fontSize="sm" >{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.address_line2}</Text>
+                        <Text fontSize="sm">{(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.pin_code || ''}</Text>
+                        {(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.mobile ? <Text mt={2} fontSize="xs">Mobile: +91 {(addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress])?.mobile}</Text> : null}
+                    </Box>
+                </Flex> : <></>}
                     </ModalBody>
 
                     <ModalFooter>
                         <Button variant='ghost' size="sm" mr={4} onClick={() => {onClose(); formik.setFieldValue('selectedAddress', '')}}>Cancel</Button>
                         <Button colorScheme='blue' onClick={() => {
                             onClose();
-                            window?.top?.postMessage({ type: "TURBO_ROUTE", address: JSON.stringify((addresses !== null ? addresses[+formik.values.selectedAddress] : shopifyAddresses[+formik.values.selectedAddress]))}, '*');
+                            window?.top?.postMessage(
+                                { type: "TURBO_ROUTE", address: JSON.stringify({ "name": "Raghav", "address_line1": "New Address Line 1", "address_line2": "New Address Line 2", "city": "New Delhi", "district": "", "state": "Delhi", "country": "IN", "pin_code": "110034" })}, '*');
                         }} size="sm">
                             Proceed
                         </Button>
@@ -105,7 +109,7 @@ export default function AddressList() {
                 </Box>
             </Box>
 
-            {(!shopifyAddresses || !shopifyAddresses.length) ? <Center>
+            {(!shopifyAddresses || !shopifyAddresses.length) ? <Center h={'70dvh'}>
                 <Text>No Addresses Found!</Text>
             </Center> : <></>}
 
@@ -115,15 +119,23 @@ export default function AddressList() {
                         <Button onClick={() => {
                             // Mock a call to fetch addresses
 
-                            if(true) {
-                                const a = [ { "name": "Utkarsh Saxena", "address_line1": "709 Shahbad, Near Koharapeer", "address_line2": "", "city": "Bareilly", "district": "", "state": "Uttar Pradesh", "country": "IN", "pin_code": "243001" } ]
+                            if(false) {
+                                toast({
+                                    title: `Found 1 new address!`,
+                                    status: 'success',
+                                    variant: 'left-accent',
+                                    position: 'top-right',
+                                    duration: 3000,
+                                    isClosable: true,
+                                });
+                                const a = [ { "name": "Raghav", "address_line1": "New Address Line 1", "address_line2": "New Address Line 2", "city": "New Delhi", "district": "", "state": "Delhi", "country": "IN", "pin_code": "110034" } ]
                                 setAddresses(a)
                                 localStorage?.setItem('addresses', encodeURIComponent(JSON.stringify(a)))
                                 return
                             }
                             
                             toast({
-                                title: `No Addresses found!`,
+                                title: `No addresses found!`,
                                 status: 'warning',
                                 variant: 'left-accent',
                                 position: 'top-right',
@@ -159,6 +171,12 @@ export default function AddressList() {
                     <Flex className={styles.section} ps={4} pe={4} pt={2} pb={2} align={`center`} mb={2}>
                         <Box className={`${styles.sectionContent}`} flexGrow={1}>
                             <Text fontWeight={`bold`}>Your number <Text as="span" ms={4} fontWeight={`bold`}>{phone}</Text></Text>
+                        </Box>
+                        <Box onClick={() => {
+                            router.replace('/profile')
+                            return
+                        }} cursor={'pointer'}>
+                            <Text><FaChevronRight /></Text>
                         </Box>
                     </Flex>
                 </Box>
