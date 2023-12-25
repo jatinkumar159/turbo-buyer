@@ -90,7 +90,11 @@ export default function EditAddress() {
             city: Yup.string().nullable(false).required('Required'),
             state: Yup.string().required('Required'),
             country: Yup.string().required('Required'),
-            pincode: Yup.string().required('Required'),
+            pincode: Yup.string().required('Required').length(6, 'Invalid Pincode').test('invalid-pincode', 'Invalid Pincode', function (value) {
+                const { city, state } = this.parent;
+                if (city && state) return true;
+                else return false;
+            }),
             address_type: Yup.string().required('Required'),
             mobile: Yup.string().length(10, 'Invalid Mobile Number').required('Required'),
             email: Yup.string().email('Invalid Email Format'),
@@ -115,49 +119,24 @@ export default function EditAddress() {
     const options = ['HOME', 'WORK', 'OTHER']
     const group = getRootProps();
 
-
-    const handlePinCodeChange = async (e: ChangeEvent<HTMLInputElement>) => {
-        formik.handleChange(e);
-        if (e.target.value?.length === 6) {
-            try {
-                setLoadingPincode(true);
-                const data: any = await getPostalAddress(e.target.value);
-                if (data.hasOwnProperty('api_error')) {
-                    formik.setErrors({
-                        pincode: 'Invalid Pincode'
-                    });
-                    setLoadingPincode(false);
-                    return;
-                }
-
-                if (data.city === null || data.state === null) {
-                    formik.setErrors({
-                        pincode: "Invalid Pincode"
-                    });
-                    setLoadingPincode(false);
-                    return;
-                }
-                formik.setValues({
-                    ...formik.values,
-                    pincode: e.target.value,
-                    city: data['city'],
-                    country: data['country'],
-                    state: data['state'],
-                })
-                setLoadingPincode(false);
-            } catch {
-                showErrorToast(toast, { error_code: '500', message: 'An Internal Server Error Occurred, Please Try Again Later' });
-            }
-        } else {
-            formik.setValues({
-                ...formik.values,
-                pincode: e.target.value,
-                city: '',
-                country: '',
-                state: '',
-            })
+    const fillPostalData = async (pincode: string) => {
+        setLoadingPincode(true);
+        const data: any = await getPostalAddress(pincode);
+        if (data.hasOwnProperty('api_error') || data.city === null || data.state === null) {
+            setLoadingPincode(false);
+            return;
         }
+        await formik.setValues({ ...formik.values, city: data['city'], state: data['state'], country: data['country'] });
+        setLoadingPincode(false);
     }
+
+    useEffect(() => {
+        if (formik.values.pincode?.length === 6) {
+            fillPostalData(formik.values.pincode);
+        } else {
+            formik.setValues({ ...formik.values, city: '', state: '', country: '' });
+        }
+    }, [formik.values.pincode])
 
     const handleChangeNumber = () => {
         dispatch(unsetPhone());
@@ -205,7 +184,7 @@ export default function EditAddress() {
                                 <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
                             </FormControl>
                             <FormControl variant="floating" mb={4} isInvalid={formik.touched.pincode && formik.errors.pincode ? true : false}>
-                                <Input type="text" placeholder="pincode" aria-placeholder="Pincode" {...formik.getFieldProps('pincode')} onChange={handlePinCodeChange}></Input>
+                                <Input type="text" placeholder="pincode" aria-placeholder="Pincode" {...formik.getFieldProps('pincode')}></Input>
                                 <FormLabel ps={4} htmlFor="name">Pincode</FormLabel>
                                 <FormErrorMessage>{formik.errors.pincode}</FormErrorMessage>
                             </FormControl>
